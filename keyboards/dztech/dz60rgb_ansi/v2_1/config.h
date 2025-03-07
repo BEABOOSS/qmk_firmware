@@ -16,11 +16,9 @@
 
 #pragma once
 
-
 // Unfortunately, some applications drop or misorder fast key events. This is a
 // partial fix to slow down the rate at which macros are sent.
 #define TAP_CODE_DELAY 5
-
 
 #define IS31FL3733_I2C_ADDRESS_1 IS31FL3733_I2C_ADDRESS_GND_GND
 
@@ -30,49 +28,15 @@
 
 #define QUICK_TAP_TERM 0
 
-#define SELECT_WORD_TIMEOUT 2000  // When idle, clear state after 2 seconds.
-
+#define SELECT_WORD_TIMEOUT 2000 // When idle, clear state after 2 seconds.
 
 // When idle, turn off Layer Lock after 60 seconds.
-#define LAYER_LOCK_IDLE_TIMEOUT 60000
-
+#define LAYER_LOCK_IDLE_TIMEOUT 6000
 
 // Define speed curve for Orbital Mouse.
-#define ORBITAL_MOUSE_SPEED_CURVE \
-      {24, 24, 24, 32, 62, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72}
+#define ORBITAL_MOUSE_SPEED_CURVE {24, 24, 24, 32, 62, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72}
 //     |               |               |               |           |
 // t = 0.000           1.024           2.048           3.072       3.840 s
-
-
-#define PALETTEFX_ENABLE_ALL_EFFECTS
-#define PALETTEFX_ENABLE_ALL_PALETTES
-
-// Enable just the flow
-// #define PALETTEFX_GRADIENT_ENABLE
-// #define PALETTEFX_FLOW_ENABLE
-// #define PALETTEFX_RIPPLE_ENABLE
-// #define PALETTEFX_SPARKLE_ENABLE
-// #define PALETTEFX_VORTEX_ENABLE
-// #define PALETTEFX_REACTIVE_ENABLE
-
-// efx
-// #define PALETTEFX_AFTERBURN_ENABLE
-// #define PALETTEFX_AMBER_ENABLE
-// #define PALETTEFX_BADWOLF_ENABLE
-// #define PALETTEFX_CARNIVAL_ENABLE
-// #define PALETTEFX_CLASSIC_ENABLE
-// #define PALETTEFX_DRACULA_ENABLE
-// #define PALETTEFX_GROOVY_ENABLE
-// #define PALETTEFX_NOTPINK_ENABLE
-// #define PALETTEFX_PHOSPHOR_ENABLE
-// #define PALETTEFX_POLARIZED_ENABLE
-// #define PALETTEFX_ROSEGOLD_ENABLE
-// #define PALETTEFX_SPORT_ENABLE
-// #define PALETTEFX_SYNTHWAVE_ENABLE
-// #define PALETTEFX_THERMAL_ENABLE
-// #define PALETTEFX_VIRIDIS_ENABLE
-// #define PALETTEFX_WATERMELON_ENABLE
-
 
 // Matrix positions of the left home row keys.
 #define LEFT_HOME_ROW 3
