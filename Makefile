@@ -65,6 +65,8 @@ ERROR_FILE := $(BUILD_DIR)/error_occurred
 
 .DEFAULT_GOAL := all:all
 
+CONSOLE_ENABLE=yes
+
 
 # Compare the start of the RULE variable with the first argument($1)
 # If the rules equals $1 or starts with $1:, RULE_FOUND is set to true
