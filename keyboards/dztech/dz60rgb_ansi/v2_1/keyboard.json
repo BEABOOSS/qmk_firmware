@@ -18,14 +18,7 @@
     "processor": "atmega32u4",
     "bootloader": "lufa-ms",
     "features": {
-        "bootmagic": true,
-        "mousekey": true,
-        "extrakey": true,
-        "nkro": true,
         "rgb_matrix": true
-    },
-    "build": {
-        "lto": true
     },
     "debounce": 3
 }

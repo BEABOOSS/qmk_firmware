@@ -1,17 +1,38 @@
 BOOTLOADER_SIZE = 6144
 
-
-# TAP DANCE
-TAP_DANCE_ENABLE = no
-# Auto Correct
-AUTOCORRECT_ENABLE = yes
-
-# RGB_MATRIX_CUSTOM_USER = yes
-MOUSE_ENABLE = yes
+BOOTMAGIC_ENABLE = yes
 COMBO_ENABLE = yes
+EXTRAKEY_ENABLE = yes
+LTO_ENABLE = yes
+MOUSEKEY_ENABLE = no
+REPEAT_KEY_ENABLE = no
+UNICODE_ENABLE = no
+UNICODEMAP_ENABLE = no
+UCIS_ENABLE = no
+UNICODE_COMMON = no
+
+AUTOCORRECT_ENABLE ?= no
+CAPS_WORD_ENABLE ?= no
+CONSOLE_ENABLE ?= no
+GRAVE_ESC_ENABLE ?= no
 LAYER_LOCK_ENABLE = yes
-REPEAT_KEY_ENABLE = yes
+NKRO_ENABLE ?= yes
+RGB_MATRIX_CUSTOM_USER ?= yes
+SPACE_CADET_ENABLE ?= no
+TAP_DANCE_ENABLE ?= no
 
-SRC += features/select_word.c
-SRC += features/orbital_mouse.c
 
+
+ORBITAL_MOUSE_ENABLE ?= no
+ifeq ($(strip $(ORBITAL_MOUSE_ENABLE)), yes)
+	MOUSE_ENABLE = yes
+	OPT_DEFS += -DORBITAL_MOUSE_ENABLE
+	SRC += features/orbital_mouse.c
+endif
+
+
+SELECT_WORD_ENABLE ?= yes
+ifeq ($(strip $(SELECT_WORD_ENABLE)), yes)
+	OPT_DEFS += -DSELECT_WORD_ENABLE
+	SRC += features/select_word.c
+endif

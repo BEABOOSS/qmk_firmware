@@ -26,6 +26,12 @@
 #define TAPPING_TERM_PER_KEY
 #define PERMISSIVE_HOLD
 
+// Don't apply custom shift keys with mods other than Shift.
+#define CUSTOM_SHIFT_KEYS_NEGMODS ~MOD_MASK_SHIFT
+
+// Only apply custom shift keys on layers 0 and 4.
+#define CUSTOM_SHIFT_KEYS_LAYER_MASK (1 << 0) | (1 << 4)
+
 #define QUICK_TAP_TERM 0
 
 #define SELECT_WORD_TIMEOUT 2000 // When idle, clear state after 2 seconds.
@@ -44,3 +50,32 @@
 #define LEFT_HOME_RING_COL 3
 #define LEFT_HOME_MIDDLE_COL 4
 #define LEFT_HOME_INDEX_COL 5
+
+// #define PALETTEFX_ENABLE_ALL_EFFECTS
+// #define PALETTEFX_ENABLE_ALL_PALETTES
+
+// Enable just the Gradient and Ripple effects.
+// #define PALETTEFX_GRADIENT_ENABLE
+// #define PALETTEFX_FLOW_ENABLE
+#define PALETTEFX_RIPPLE_ENABLE
+// #define PALETTEFX_SPARKLE_ENABLE
+// #define PALETTEFX_VORTEX_ENABLE
+// #define PALETTEFX_REACTIVE_ENABLE
+
+// Enable just the Afterburn, Not Pink, and Phosphor palettes.
+// #define PALETTEFX_AFTERBURN_ENABLE
+// #define PALETTEFX_AMBER_ENABLE
+// #define PALETTEFX_BADWOLF_ENABLE
+#define PALETTEFX_CARNIVAL_ENABLE
+// #define PALETTEFX_CLASSIC_ENABLE
+// #define PALETTEFX_DRACULA_ENABLE
+// #define PALETTEFX_GROOVY_ENABLE
+// #define PALETTEFX_NOTPINK_ENABLE
+// #define PALETTEFX_PHOSPHOR_ENABLE
+// #define PALETTEFX_POLARIZED_ENABLE
+// #define PALETTEFX_ROSEGOLD_ENABLE
+// #define PALETTEFX_SPORT_ENABLE
+// #define PALETTEFX_SYNTHWAVE_ENABLE
+// #define PALETTEFX_THERMAL_ENABLE
+// #define PALETTEFX_VIRIDIS_ENABLE
+// #define PALETTEFX_WATERMELON_ENABLE
