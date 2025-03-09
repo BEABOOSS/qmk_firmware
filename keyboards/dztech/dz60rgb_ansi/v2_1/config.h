@@ -45,11 +45,11 @@
 // t = 0.000           1.024           2.048           3.072       3.840 s
 
 // Matrix positions of the left home row keys.
-#define LEFT_HOME_ROW 3
-#define LEFT_HOME_PINKY_COL 2
-#define LEFT_HOME_RING_COL 3
-#define LEFT_HOME_MIDDLE_COL 4
-#define LEFT_HOME_INDEX_COL 5
+#define LEFT_HOME_ROW 2
+#define LEFT_HOME_PINKY_COL 1
+#define LEFT_HOME_RING_COL 2
+#define LEFT_HOME_MIDDLE_COL 3
+#define LEFT_HOME_INDEX_COL 4
 
 // #define PALETTEFX_ENABLE_ALL_EFFECTS
 // #define PALETTEFX_ENABLE_ALL_PALETTES

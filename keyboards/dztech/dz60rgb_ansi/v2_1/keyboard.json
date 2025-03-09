@@ -17,8 +17,5 @@
     "diode_direction": "COL2ROW",
     "processor": "atmega32u4",
     "bootloader": "lufa-ms",
-    "features": {
-        "rgb_matrix": true
-    },
     "debounce": 3
 }

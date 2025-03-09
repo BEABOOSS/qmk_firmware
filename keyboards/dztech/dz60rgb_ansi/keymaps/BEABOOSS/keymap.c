@@ -88,7 +88,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] =
     //     KC_LCTL,        KC_LGUI, KC_LALT,                            KC_SPC,                             KC_RALT, MO(1),   MO(2),   KC_RCTL
     // ),
 
-    [BASE] = LAYOUT_60_ansi(  // Base layer green
+    [BASE] = LAYOUT_60_ansi(  // Base layer
         KC_ESC , SELLINE, C(KC_V), C(KC_A), C(KC_C), MS_BTN1, KC_HOME, KC_LEFT, KC_RGHT, KC_END , KC_TAB , KC_MPLY, _______, _______,
         KC_TAB , EXT_EQ , KC_W   , KC_F   , KC_P   , KC_G   , KC_J   , KC_L   , KC_U   , KC_Y   , KC_QUOT, _______, _______, _______,
         MAGIC  , HRM_A  , HRM_SR , HRM_S  , HRM_NT , KC_D   , KC_H   , HRM_NN , HRM_E  , HRM_SI , HRM_O  , KC_BSPC, MAGIC  ,
@@ -101,7 +101,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] =
         _______, KC_GRV , KC_LT  , KC_GT  , KC_MINS, KC_PIPE, KC_CIRC, KC_LCBR, KC_RCBR, KC_DLR , _______, _______, _______, _______,
         _______, KC_EXLM, KC_ASTR, NAV_SLS, NAV_BEQL, KC_AMPR, KC_HASH, KC_LPRN, KC_RPRN, KC_SCLN, KC_DQUO, _______, _______,
         _______, KC_TILD, KC_PLUS, KC_LBRC, KC_RBRC, KC_PERC, KC_AT  , KC_COLN, KC_COMM, KC_DOT , KC_QUOT, _______,
-        _______, _______, USRNAME,                         KC_SPC,                                _______, _______, _______, _______
+        _______, _______, USRNAME,                         KC_SPC,                                KC_UNDS, _______, _______, _______
     ),
 
     [NAV] = LAYOUT_60_ansi(  // Navigation blue
@@ -109,23 +109,23 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] =
         _______, KC_WREF, C(KC_PGUP), C(KC_PGDN), _______, _______, KC_PGUP, KC_HOME, KC_UP  , KC_END  , _______, _______, _______, _______,
         _______, KC_LALT, KC_LCTL, KC_LSFT, SELLINE, MS_BTN1, KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT, KC_DEL , _______, _______,
         _______, KC_LGUI, KC_PGUP, KC_PGDN, _______, _______, C(KC_Z), SELWBAK, SELWFWD, KC_APP , XXXXXXX, _______,
-        _______, _______, _______,                         KC_SPC,                                QK_LOCK, _______, _______, _______
+        _______, _______, _______,                         KC_SPC,                                QK_LLCK, _______, _______, _______
     ),
 
-    [NUM] = LAYOUT_60_ansi(  // Number white
+    [NUM] = LAYOUT_60_ansi(  // Number YELLOW
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
         _______, KC_SLSH, KC_9   , KC_8   , KC_7   , KC_ASTR, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, _______, _______,
         _______, KC_MINS, KC_3   , KC_2   , KC_1   , KC_PLUS, KC_0   , XXXXXXX, KC_E   , KC_RCTL, KC_LALT, _______, _______,
         _______, KC_X   , KC_6   , KC_5   , KC_4   , KC_PERC, XXXXXXX, XXXXXXX, KC_COMM, KC_DOT , KC_LGUI, _______,
-        _______, _______, _______,                         KC_SPC,                                QK_LOCK, _______, _______, _______
+        _______, _______, _______,                         KC_SPC,                                QK_LLCK, _______, _______, _______
     ),
 
-    [WIN] = LAYOUT_60_ansi(  // Window management layer white
+    [WIN] = LAYOUT_60_ansi(  // Window management layer GREEN
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
         _______, _______, KC_MUTE, KC_VOLD, KC_VOLU, MUTEMIC, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, _______,
         _______, _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_RSFT, XXXXXXX, KC_LALT, XXXXXXX, _______,
         _______, _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, S(A(KC_TAB)), A(KC_TAB), XXXXXXX, XXXXXXX, G(KC_ENT),
-        _______, _______, _______,                         KC_SPC,                                QK_LOCK, _______, _______, _______
+        _______, _______, _______,                         KC_SPC,                                QK_LLCK, _______, _______, _______
     ),
 
     [FUN] = LAYOUT_60_ansi(  // Funky fun layer white
@@ -133,7 +133,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] =
         XXXXXXX, KC_F18 , KC_F9  , KC_F8  , KC_F7  , XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, _______,
         XXXXXXX, KC_F10 , KC_F14  , KC_F19  , KC_F20  , XXXXXXX, XXXXXXX, XXXXXXX, KC_RSFT, KC_RCTL, KC_LALT, XXXXXXX, _______,
         XXXXXXX, KC_F11 , KC_F6  , KC_F5  , KC_F4  , XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_RGUI, QK_RBT ,
-        _______, _______, DB_TOGG,                         KC_SPC,                                QK_LOCK, _______, _______, _______
+        _______, _______, DB_TOGG,                         KC_SPC,                                QK_LLCK, _______, _______, _______
     ),
 
     [EXT] = LAYOUT_60_ansi(  // Mouse and extra white
@@ -141,7 +141,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] =
         _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, _______, _______, _______, _______, _______, _______, _______,
         _______, KC_LALT, KC_LCTL, KC_LSFT, SELLINE, XXXXXXX, _______, _______, _______, _______, _______, _______, _______,
         _______, KC_LGUI, C(KC_V), C(KC_A), C(KC_C), C(KC_X), XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
-        _______, _______, _______,                         KC_SPC,                                QK_LOCK, _______, _______, _______
+        _______, _______, _______,                         KC_SPC,                                QK_LLCK, _______, _______, _______
     ),
 
     [GAME] = LAYOUT_60_ansi(  // Gaming Layer
@@ -225,6 +225,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t* record) {
 //     & *   -> &nbsp;          (HTML code)
 //     . *   -> ../             (shell)
 //     . * @ -> ../../
+
 // uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
 //     if (mods == MOD_BIT_LALT) {
 //         switch (keycode) {
@@ -336,7 +337,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t* record) {
 ///////////////////////////////////////////////////////////////////////////////
 // RGB Matrix Lighting (https://docs.qmk.fm/features/rgb_matrix)
 ///////////////////////////////////////////////////////////////////////////////
-#if RGB_MATRIX_ENABLE
+#if RGB_MATRIX_CUSTOM_USER
 // The following logic controls the RGB Matrix light level with a convenient
 // 3-state setting---off, dim, or full---and turns off automatically and with
 // smooth transitions when the keyboard is idle.
@@ -436,77 +437,55 @@ static void lighting_task(void) {
         lighting.val_end = 0;
     }
 }
-#endif // RGB_MATRIX_ENABLE
+#endif // RGB_MATRIX_CUSTOM_USER
+
+#if RGB_MATRIX_ENABLE
+void set_layer_color(uint8_t led_min, uint8_t led_max, uint8_t layer, uint8_t red, uint8_t green, uint8_t blue) {
+    for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
+        for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
+            uint8_t index = g_led_config.matrix_co[row][col];
+
+            if (index >= led_min && index < led_max && index != NO_LED && keymap_key_to_keycode(layer, (keypos_t){col, row}) > KC_TRNS) {
+                rgb_matrix_set_color(index, red, green, blue);
+            }
+        }
+    }
+}
 
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
-    // return true;
-    if (get_highest_layer(layer_state) == BASE) {
-        uint8_t layer = get_highest_layer(layer_state);
-
-        for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
-            for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
-                uint8_t index = g_led_config.matrix_co[row][col];
-
-                if (index >= led_min && index < led_max && index != NO_LED && keymap_key_to_keycode(layer, (keypos_t){col, row}) > KC_TRNS) {
-                    rgb_matrix_set_color(index, RGB_GREEN);
-                }
-            }
-        }
-    }
-
-    if (get_highest_layer(layer_state) == SYM) {
-        uint8_t layer = get_highest_layer(layer_state);
-
-        for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
-            for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
-                uint8_t index = g_led_config.matrix_co[row][col];
-
-                if (index >= led_min && index < led_max && index != NO_LED && keymap_key_to_keycode(layer, (keypos_t){col, row}) > KC_TRNS) {
-                    rgb_matrix_set_color(index, RGB_RED);
-                }
-            }
-        }
-    }
-
-    if (get_highest_layer(layer_state) == NAV) {
-        uint8_t layer = get_highest_layer(layer_state);
-
-        for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
-            for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
-                uint8_t index = g_led_config.matrix_co[row][col];
-
-                if (index >= led_min && index < led_max && index != NO_LED && keymap_key_to_keycode(layer, (keypos_t){col, row}) > KC_TRNS) {
-                    rgb_matrix_set_color(index, RGB_BLUE);
-                }
-            }
-        }
-    }
-
-    if (get_highest_layer(layer_state) > NAV) {
-        uint8_t layer = get_highest_layer(layer_state);
-
-        for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
-            for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
-                uint8_t index = g_led_config.matrix_co[row][col];
-
-                if (index >= led_min && index < led_max && index != NO_LED && keymap_key_to_keycode(layer, (keypos_t){col, row}) > KC_TRNS) {
-                    rgb_matrix_set_color(index, RGB_WHITE);
-                }
-            }
-        }
+    uint8_t layer = get_highest_layer(layer_state);
+    switch (layer) {
+        case BASE:
+            break;
+        case SYM:
+            set_layer_color(led_min, led_max, layer, RGB_RED);
+            break;
+        case NAV:
+            set_layer_color(led_min, led_max, layer, RGB_BLUE);
+            break;
+        case NUM:
+            set_layer_color(led_min, led_max, layer, RGB_YELLOW);
+            break;
+        case WIN:
+            set_layer_color(led_min, led_max, layer, RGB_GREEN);
+            break;
+        default:
+            set_layer_color(led_min, led_max, layer, RGB_WHITE);
+            break;
     }
 
     return false;
 }
+#endif // RGB_MATRIX_ENABLE
 
 bool process_record_user(uint16_t keycode, keyrecord_t* record) {
-#if RGB_MATRIX_ENABLE
+#if RGB_MATRIX_CUSTOM_USER
     lighting_init();
-#endif // RGB_MATRIX_ENABLE
+#endif // RGB_MATRIX_CUSTOM_USER
 
-#ifdef RGB_MATRIX_ENABLE
+#ifdef RGB_MATRIX_CUSTOM_USER
     lighting_activity_trigger();
-#endif // RGB_MATRIX_ENABLE
+#endif // RGB_MATRIX_CUSTOM_USER
 #ifdef ORBITAL_MOUSE_ENABLE
     if (!process_orbital_mouse(keycode, record)) {
         return false;
@@ -518,31 +497,39 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
     }
 #endif // SELECT_WORD_ENABLE
 
-    // dlog_record(keycode, record);
-
     static bool left_home_ring_held  = false;
     static bool left_home_index_held = false;
     if (record->event.key.row == LEFT_HOME_ROW) {
+        dprintf(" Col: %d", record->event.key.col);
         switch (record->event.key.col) {
             case LEFT_HOME_RING_COL:
+                xprint(record->event.pressed);
                 left_home_ring_held = record->event.pressed;
                 break;
             case LEFT_HOME_INDEX_COL:
+                xprint(record->event.pressed);
                 left_home_index_held = record->event.pressed;
                 break;
         }
+        // dprintf("%s", "left home row is being pressed");
 
         // NAV stays on while layer locked or while either ring or index is held.
-        if ((is_layer_locked(NAV) || left_home_ring_held || left_home_index_held)) {
+        //
+        if (!(is_layer_locked(NAV) || left_home_ring_held || left_home_index_held)) {
+            dprintf("%s", " not working ");
             layer_off(NAV);
+        } else {
+            dprintf("%s", " working ");
         }
     }
 
     // Logic for Alt mod when using alt-tabbing keys.
-    if (keycode == HRM_O && record->tap.count == 0 && !record->event.pressed) {
-        unregister_mods(MOD_BIT(KC_LALT)); // not exactly sure
+    if (keycode == HRM_WDOT && record->tap.count == 0 && !record->event.pressed) {
+        unregister_mods(MOD_BIT_LALT);
+        // if hrm_wdot has not been pressed or tapped unrigister the alt input
     } else if (record->event.pressed && (keycode == S(A(KC_TAB)) || keycode == A(KC_TAB))) {
-        register_mods(MOD_BIT(KC_LALT)); // not exactly sure
+        register_mods(MOD_BIT_LALT);
+        // if hrm_wdot is being pressed and the key being pressed is either sat || at then register alt being acitve
     }
 
     // gets the current state of a modifier
@@ -612,9 +599,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
             }
             return true;
 
-        case HRM_NT: // NAV switch.
+        case HRM_NT: // NAV switch
             if (!record->tap.count) {
+                dprintf("%s", "not tapped");
                 if (record->event.pressed) {
+                    dprintf("%s", "pressed");
                     layer_on(NAV);
                 }
                 return false;
@@ -667,9 +656,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
 }
 
 void housekeeping_task_user(void) {
-#ifdef RGB_MATRIX_ENABLE
+#ifdef RGB_MATRIX_CUSTOM_USER
     lighting_task();
-#endif // RGB_MATRIX_ENABLE
+#endif // RGB_MATRIX_CUSTOM_USER
 #ifdef ORBITAL_MOUSE_ENABLE
     orbital_mouse_task();
 #endif // ORBITAL_MOUSE_ENABLE
