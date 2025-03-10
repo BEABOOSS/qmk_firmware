@@ -4,9 +4,6 @@
         "device_version": "2.1.0"
     },
     "rgb_matrix": {
-        "animations": {
-            "gradient_left_right": true
-        },
         "driver": "is31fl3733",
         "sleep": true
     },

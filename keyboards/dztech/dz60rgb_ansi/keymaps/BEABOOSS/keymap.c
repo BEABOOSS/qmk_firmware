@@ -163,14 +163,14 @@ uint8_t myrand(void) {
 ///////////////////////////////////////////////////////////////////////////////
 // Combos (https://docs.qmk.fm/features/combo)
 ///////////////////////////////////////////////////////////////////////////////
-// const uint16_t caps_combo[] PROGMEM = {KC_J, KC_COMM, COMBO_END};
+const uint16_t caps_combo[] PROGMEM = {KC_C, KC_COMM, COMBO_END};
 // const uint16_t c_v_combo[] PROGMEM = {KC_C, KC_V, COMBO_END};
 // const uint16_t h_comm_combo[] PROGMEM = {HRM_H, KC_COMM, COMBO_END};
 // const uint16_t comm_dot_combo[] PROGMEM = {KC_COMM, HRM_DOT, COMBO_END};
 const uint16_t h_n_combo[] PROGMEM = {KC_H, HRM_NN, COMBO_END};
 // clang-format off
 combo_t key_combos[] = {
-    // COMBO(caps_combo, CW_TOGG),          // J and , => activate Caps Word.
+    COMBO(caps_combo, CW_TOGG),          // J and , => activate Caps Word.
     // COMBO(c_v_combo, KC_BSLS),           // c and v => backslash
     // COMBO(h_comm_combo, KC_QUOT),        // H and , => '
     // COMBO(comm_dot_combo, KC_SCLN),      // , and . => ;
@@ -178,6 +178,9 @@ combo_t key_combos[] = {
 };
 // clang-format on
 
+///////////////////////////////////////////////////////////////////////////////
+// Tap-hold configuration (https://docs.qmk.fm/tap_hold)
+///////////////////////////////////////////////////////////////////////////////
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t* record) {
     switch (keycode) {
         case HRM_S:
@@ -187,6 +190,37 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t* record) {
             return TAPPING_TERM;
     }
 };
+
+///////////////////////////////////////////////////////////////////////////////
+// Caps word (https://docs.qmk.fm/features/caps_word)
+///////////////////////////////////////////////////////////////////////////////
+#ifdef CAPS_WORD_ENABLE
+bool caps_word_press_user(uint16_t keycode) {
+    switch (keycode) {
+        // Keycodes that continue Caps Word, with shift applied.
+        case KC_A ... KC_Z:
+            add_weak_mods(MOD_BIT_LSHIFT); // Apply shift to the next key.
+            return true;
+
+        // Keycodes that continue Caps Word, without shifting.
+        case KC_1 ... KC_0:
+        case KC_BSPC:
+        case KC_DEL:
+        case KC_UNDS:
+        case KC_COLN:
+        case M_THE:
+        case M_ION:
+        case M_MENT:
+        case M_QUEN:
+        case M_TMENT:
+            return true;
+
+        default:
+            return false; // Deactivate Caps Word.
+    }
+}
+
+#endif // CAPS_WORD_ENABLE
 
 // The following describes the magic key functionality, where * represents the
 // magic key and @ the repeat key. For example, tapping A and then the magic key
@@ -226,113 +260,111 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t* record) {
 //     . *   -> ../             (shell)
 //     . * @ -> ../../
 
-// uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
-//     if (mods == MOD_BIT_LALT) {
-//         switch (keycode) {
-//             case KC_U:
-//                 return A(KC_O);
-//             case KC_O:
-//                 return A(KC_U);
-//             case HRM_NN:
-//                 return A(KC_I);
-//             case HRM_SI:
-//                 return A(KC_N);
-//         }
-//     } else if ((mods & ~MOD_MASK_SHIFT) == 0) {
-//         // This is where most of the "magic" for the MAGIC key is implemented.
-//         switch (keycode) {
-//             case KC_SPC: // spc -> THE
-//             case KC_ENT:
-//             case KC_TAB:
-//                 return M_THE;
+uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
+    if (mods == MOD_BIT_LALT) {
+        switch (keycode) {
+            case KC_U:
+                return A(KC_O);
+            case KC_O:
+                return A(KC_U);
+            case HRM_NN:
+                return A(KC_I);
+            case HRM_SI:
+                return A(KC_N);
+        }
+    } else if ((mods & ~MOD_MASK_SHIFT) == 0) {
+        // This is where most of the "magic" for the MAGIC key is implemented.
+        switch (keycode) {
+            case KC_SPC: // spc -> THE
+            case KC_ENT:
+            case KC_TAB:
+                return M_THE;
 
-//             // For navigating next/previous search results in Vim:
-//             // N -> Shift + N, Shift + N -> N.
-//             case HRM_NN:
-//                 if ((mods & MOD_MASK_SHIFT) == 0) {
-//                     return S(KC_N);
-//                 }
-//                 // Fall through intended.
-//             case KC_N:
-//                 return KC_N;
-//             // Fix SFBs and awkward strokes.
-//             case HRM_E:
-//                 return KC_U; // E -> U
-//             case KC_U:
-//                 return KC_E; // U -> E
-//             case HRM_SI:
-//                 if ((mods & MOD_MASK_SHIFT) == 0) {
-//                     return M_ION; // I -> ON
-//                 } else {
-//                     return KC_QUOT; // Shift I -> '
-//                 }
-//             case KC_M:
-//                 return M_MENT; // M -> ENT
-//             case EXT_EQ:
-//                 return M_QUEN; // Q -> UEN
-//             case HRM_NT:
-//                 return M_TMENT; // T -> TMENT
+            // For navigating next/previous search results in Vim:
+            // N -> Shift + N, Shift + N -> N.
+            case HRM_NN:
+                if ((mods & MOD_MASK_SHIFT) == 0) {
+                    return S(KC_N);
+                }
+                // Fall through intended.
+            case KC_N:
+                return KC_N;
+            // Fix SFBs and awkward strokes.
+            case HRM_E:
+                return KC_U; // E -> U
+            case KC_U:
+                return KC_E; // U -> E
+            case HRM_SI:
+                if ((mods & MOD_MASK_SHIFT) == 0) {
+                    return M_ION; // I -> ON
+                } else {
+                    return KC_QUOT; // Shift I -> '
+                }
+            case HRM_M:
+                return M_MENT; // M -> ENT
+            case EXT_EQ:
+                return M_QUEN; // Q -> UEN
+            case HRM_NT:
+                return M_TMENT; // T -> TMENT
 
-//             case KC_P:
-//                 return KC_D; // P -> D
-//             // case HRM_NT:
-//             //     return KC_D; // T -> D
-//             case HRM_B:
-//                 return KC_D; // B -> D
-//             case KC_G:
-//                 return KC_D; // G -> D
-//             case KC_D:
-//                 return KC_P; // D -> P
+            case KC_P:
+                return KC_D; // P -> D
+            case HRM_B:
+                return KC_D; // B -> D
+            case KC_G:
+                return KC_D; // G -> D
+            case KC_D:
+                return KC_P; // D -> P
 
-//             case KC_F:
-//                 return KC_C; // F -> C
-//             case HRM_A:
-//                 return KC_C; // A -> C
+            case KC_F:
+                return KC_C; // F -> C
+            case HRM_A:
+                return KC_C; // A -> C
 
-//             case HRM_S:
-//                 return KC_F; // S -> F
-//             // case HRM_WDOT:
-//             //     // if ((mods & MOD_MASK_SHIFT) == 0) {
-//             //     //     return M_UPDIR; // . -> ./
-//             //     // }
-//             //     return M_NOOP;
-//             case KC_HASH:
-//                 return M_INCLUDE; // # -> include
-//             case KC_AMPR:
-//                 return M_NBSP; // & -> nbsp;
-//             case KC_EQL:
-//                 return M_EQEQ; // = -> ==
-//             case KC_RBRC:
-//                 return KC_SCLN; // ] -> ;
-//             case KC_AT:
-//                 return USRNAME; // @ -> <username>
+            case HRM_S:
+                return KC_F; // S -> F
+            // case HRM_WDOT:
+            //     // if ((mods & MOD_MASK_SHIFT) == 0) {
+            //     //     return M_UPDIR; // . -> ./
+            //     // }
+            //     return M_NOOP;
+            case KC_HASH:
+                return M_INCLUDE; // # -> include
+            case KC_AMPR:
+                return M_NBSP; // & -> nbsp;
+            case KC_EQL:
+                return M_EQEQ; // = -> ==
+            case KC_RBRC:
+                return KC_SCLN; // ] -> ;
+            case KC_AT:
+                return USRNAME; // @ -> <username>
 
-//             case KC_COMM:
-//                 if ((mods & MOD_MASK_SHIFT) != 0) {
-//                     return KC_EQL; // ! -> =
-//                 }
-//                 return M_NOOP;
-//             case HRM_O:
-//                 if ((mods & MOD_MASK_SHIFT) != 0) {
-//                     return M_DOCSTR; // " -> ""<cursor>"""
-//                 }
-//                 return M_NOOP;
-//             case KC_GRV: // ` -> ``<cursor>``` (for Markdown code)
-//                 return M_MKGRVS;
-//         }
-//     }
-//     return KC_TRNS;
-// }
+            // case KC_COMM:
+            //     if ((mods & MOD_MASK_SHIFT) != 0) {
+            //         return KC_EQL; // ! -> =
+            //     }
+            //     return M_NOOP;
+            case HRM_O:
+                if ((mods & MOD_MASK_SHIFT) != 0) {
+                    return M_DOCSTR; // " -> ""<cursor>"""
+                }
+                return M_NOOP;
+            case KC_GRV: // ` -> ``<cursor>``` (for Markdown code)
+                return M_MKGRVS;
+        }
+    }
+    return KC_TRNS;
+}
 
-// // An enhanced version of SEND_STRING: if Caps Word is active, the Shift key is
-// // held while sending the string. Additionally, the last key is set such that if
-// // the Repeat Key is pressed next, it produces `repeat_keycode`. This helper is
-// // used for several macros below in my process_record_user() function.
-// #define MAGIC_STRING(str, repeat_keycode) magic_send_string_P(PSTR(str), (repeat_keycode))
-// static void magic_send_string_P(const char* str, uint16_t repeat_keycode) {
-//     send_string_P(str); // Send the string.
-//     set_last_keycode(repeat_keycode);
-// }
+// An enhanced version of SEND_STRING: if Caps Word is active, the Shift key is
+// held while sending the string. Additionally, the last key is set such that if
+// the Repeat Key is pressed next, it produces `repeat_keycode`. This helper is
+// used for several macros below in my process_record_user() function.
+#define MAGIC_STRING(str, repeat_keycode) magic_send_string_P(PSTR(str), (repeat_keycode))
+static void magic_send_string_P(const char* str, uint16_t repeat_keycode) {
+    send_string_P(str); // Send the string.
+    set_last_keycode(repeat_keycode);
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // RGB Matrix Lighting (https://docs.qmk.fm/features/rgb_matrix)
@@ -478,6 +510,53 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 }
 #endif // RGB_MATRIX_ENABLE
 
+// clang-format off
+
+///////////////////////////////////////////////////////////////////////////////
+// Debug logging
+///////////////////////////////////////////////////////////////////////////////
+#if !defined(NO_DEBUG) && defined(KEYCODE_STRING_ENABLE)
+#pragma message "dlog_record: enabled"
+#include "print.h"
+#include "features/keycode_string.h"
+
+KEYCODE_STRING_NAMES_USER(
+  KEYCODE_STRING_NAME(ARROW),
+  KEYCODE_STRING_NAME(STDCC),
+  KEYCODE_STRING_NAME(USRNAME),
+  KEYCODE_STRING_NAME(SELLINE),
+  KEYCODE_STRING_NAME(SELWBAK),
+  KEYCODE_STRING_NAME(SELWFWD),
+  KEYCODE_STRING_NAME(RGBBRI),
+  KEYCODE_STRING_NAME(RGBNEXT),
+  KEYCODE_STRING_NAME(RGBHUP),
+  KEYCODE_STRING_NAME(RGBHRND),
+  KEYCODE_STRING_NAME(RGBDEF1),
+  KEYCODE_STRING_NAME(RGBDEF2),
+);
+
+static void dlog_record(uint16_t keycode, keyrecord_t* record) {
+  if (!debug_enable) { return; }
+  uint8_t layer = read_source_layers_cache(record->event.key);
+  bool is_tap_hold = IS_QK_MOD_TAP(keycode) || IS_QK_LAYER_TAP(keycode);
+  xprintf("L%-2u ", layer);  // Log the layer.
+  if (IS_COMBOEVENT(record->event)) {  // Combos don't have a position.
+    xprintf("combo   ");
+  } else {  // Log the "(row,col)" position.
+    xprintf("(%2u,%2u) ", record->event.key.row, record->event.key.col);
+  }
+  xprintf("%-4s %-7s %s\n",  // "(tap|hold) (press|release) <keycode>".
+      is_tap_hold ? (record->tap.count ? "tap" : "hold") : "",
+      record->event.pressed ? "press" : "release",
+      get_keycode_string(keycode));
+}
+#else
+#pragma message "dlog_record: disabled"
+#define dlog_record(keycode, record)
+#endif  // !defined(NO_DEBUG) && defined(KEYCODE_STRING_ENABLE)
+
+// clang-format on
+
 bool process_record_user(uint16_t keycode, keyrecord_t* record) {
 #if RGB_MATRIX_CUSTOM_USER
     lighting_init();
@@ -497,17 +576,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
     }
 #endif // SELECT_WORD_ENABLE
 
+    dlog_record(keycode, record);
+
     static bool left_home_ring_held  = false;
     static bool left_home_index_held = false;
     if (record->event.key.row == LEFT_HOME_ROW) {
-        dprintf(" Col: %d", record->event.key.col);
         switch (record->event.key.col) {
             case LEFT_HOME_RING_COL:
-                xprint(record->event.pressed);
                 left_home_ring_held = record->event.pressed;
                 break;
             case LEFT_HOME_INDEX_COL:
-                xprint(record->event.pressed);
                 left_home_index_held = record->event.pressed;
                 break;
         }
@@ -516,10 +594,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
         // NAV stays on while layer locked or while either ring or index is held.
         //
         if (!(is_layer_locked(NAV) || left_home_ring_held || left_home_index_held)) {
-            dprintf("%s", " not working ");
             layer_off(NAV);
-        } else {
-            dprintf("%s", " working ");
         }
     }
 
@@ -533,9 +608,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
     }
 
     // gets the current state of a modifier
-    const uint8_t mods = get_mods();
-    /// const uint8_t all_mods   = (mods | get_weak_mods());
-    // const uint8_t shift_mods = all_mods & MOD_MASK_SHIFT;
+    const uint8_t mods       = get_mods();
+    const uint8_t all_mods   = (mods | get_weak_mods());
+    const uint8_t shift_mods = all_mods & MOD_MASK_SHIFT;
     // const bool    alt        = all_mods & MOD_BIT(KC_LALT);
     const uint8_t layer = read_source_layers_cache(record->event.key);
 
@@ -544,18 +619,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
         send_keyboard_report();
     }
 
-    // // If alt repeating key A, E, I, O, U, Y with no mods other than Shift, set
-    // // the last key to KC_N. Above, alternate repeat of KC_N is defined to be
-    // // again KC_N. This way, either tapping alt repeat and then repeat (or
-    // // equivalently double tapping alt repeat) is useful to type certain patterns
-    // // without SFBs:
-    // //
-    // //   D <altrep> <rep> -> DYN (as in "dynamic")
-    // //   O <altrep> <rep> -> OAN (as in "loan")
-    // if (get_repeat_key_count() < 0 && (all_mods & ~MOD_MASK_SHIFT) == 0 && (keycode == KC_A || keycode == KC_E || keycode == KC_I || keycode == KC_O || keycode == KC_U || keycode == KC_Y)) {
-    //     set_last_keycode(KC_N);
-    //     set_last_mods(0);
-    // }
+    // If alt repeating key A, E, I, O, U, Y with no mods other than Shift, set
+    // the last key to KC_N. Above, alternate repeat of KC_N is defined to be
+    // again KC_N. This way, either tapping alt repeat and then repeat (or
+    // equivalently double tapping alt repeat) is useful to type certain patterns
+    // without SFBs:
+    //
+    //   D <altrep> <rep> -> DYN (as in "dynamic")
+    //   O <altrep> <rep> -> OAN (as in "loan")
+    if (get_repeat_key_count() < 0 && (all_mods & ~MOD_MASK_SHIFT) == 0 && (keycode == KC_A || keycode == KC_E || keycode == KC_I || keycode == KC_O || keycode == KC_U || keycode == KC_Y)) {
+        set_last_keycode(KC_N);
+        set_last_mods(0);
+    }
 
     switch (keycode) {
         case SELWBAK: // Backward word selection.
@@ -601,9 +676,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
 
         case HRM_NT: // NAV switch
             if (!record->tap.count) {
-                dprintf("%s", "not tapped");
                 if (record->event.pressed) {
-                    dprintf("%s", "pressed");
                     layer_on(NAV);
                 }
                 return false;
@@ -611,46 +684,46 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
             return true;
     }
 
-    // if (record->event.pressed) {
-    //     switch (keycode) {
-    //         case USRNAME:
-    //             add_oneshot_mods(shift_mods);
-    //             clear_weak_mods();
-    //             MAGIC_STRING("BEABOOSS", KC_AT);
-    //             return false;
-    //         // Macros invoked through the MAGIC key.
-    //         case M_THE:
-    //             MAGIC_STRING(/* */ "the", KC_N);
-    //             break;
-    //         case M_ION:
-    //             MAGIC_STRING(/*i*/ "on", KC_S);
-    //             break;
-    //         case M_MENT:
-    //             MAGIC_STRING(/*m*/ "ent", KC_S);
-    //             break;
-    //         case M_QUEN:
-    //             MAGIC_STRING(/*q*/ "uen", KC_C);
-    //             break;
-    //         case M_TMENT:
-    //             MAGIC_STRING(/*t*/ "ment", KC_S);
-    //             break;
-    //         case M_INCLUDE:
-    //             SEND_STRING_DELAY(/*#*/ "include ", TAP_CODE_DELAY);
-    //             break;
-    //         case M_EQEQ:
-    //             SEND_STRING_DELAY(/*=*/"==", TAP_CODE_DELAY);
-    //             break;
-    //         case M_NBSP:
-    //             SEND_STRING_DELAY(/*&*/ "nbsp;", TAP_CODE_DELAY);
-    //             break;
-    //         case M_DOCSTR:
-    //             SEND_STRING_DELAY(/*"*/ "\"\"\"\"\"" SS_TAP(X_LEFT) SS_TAP(X_LEFT) SS_TAP(X_LEFT), TAP_CODE_DELAY);
-    //             break;
-    //         case M_MKGRVS:
-    //             SEND_STRING_DELAY(/*`*/ "``\n\n```" SS_TAP(X_UP), TAP_CODE_DELAY);
-    //             break;
-    //     }
-    // }
+    if (record->event.pressed) {
+        switch (keycode) {
+            case USRNAME:
+                add_oneshot_mods(shift_mods);
+                clear_weak_mods();
+                MAGIC_STRING("BEABOOSS", KC_AT);
+                return false;
+            // Macros invoked through the MAGIC key.
+            case M_THE:
+                MAGIC_STRING(/* */ "the", KC_N);
+                break;
+            case M_ION:
+                MAGIC_STRING(/*i*/ "on", KC_S);
+                break;
+            case M_MENT:
+                MAGIC_STRING(/*m*/ "ent", KC_S);
+                break;
+            case M_QUEN:
+                MAGIC_STRING(/*q*/ "uen", KC_C);
+                break;
+            case M_TMENT:
+                MAGIC_STRING(/*t*/ "ment", KC_S);
+                break;
+            case M_INCLUDE:
+                SEND_STRING_DELAY(/*#*/ "include ", TAP_CODE_DELAY);
+                break;
+            case M_EQEQ:
+                SEND_STRING_DELAY(/*=*/"==", TAP_CODE_DELAY);
+                break;
+            case M_NBSP:
+                SEND_STRING_DELAY(/*&*/ "nbsp;", TAP_CODE_DELAY);
+                break;
+            case M_DOCSTR:
+                SEND_STRING_DELAY(/*"*/ "\"\"\"\"\"" SS_TAP(X_LEFT) SS_TAP(X_LEFT) SS_TAP(X_LEFT), TAP_CODE_DELAY);
+                break;
+            case M_MKGRVS:
+                SEND_STRING_DELAY(/*`*/ "``\n\n```" SS_TAP(X_UP), TAP_CODE_DELAY);
+                break;
+        }
+    }
 
     return true;
 }
