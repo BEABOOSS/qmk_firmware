@@ -37,8 +37,6 @@
 #define QUICK_TAP_TERM 0
 
 #define SELECT_WORD_TIMEOUT 2000 // When idle, clear state after 2 seconds.
-
-// When idle, turn off Layer Lock after 60 seconds.
 #define LAYER_LOCK_IDLE_TIMEOUT 6000
 
 // Define speed curve for Orbital Mouse.
@@ -56,19 +54,19 @@
 // #define PALETTEFX_ENABLE_ALL_EFFECTS
 // #define PALETTEFX_ENABLE_ALL_PALETTES
 
-// Enable just the Gradient and Ripple effects.
+// Enable just the Flow effects.
 // #define PALETTEFX_GRADIENT_ENABLE
-// #define PALETTEFX_FLOW_ENABLE
-#define PALETTEFX_RIPPLE_ENABLE
+#define PALETTEFX_FLOW_ENABLE
+// #define PALETTEFX_RIPPLE_ENABLE
 // #define PALETTEFX_SPARKLE_ENABLE
 // #define PALETTEFX_VORTEX_ENABLE
 // #define PALETTEFX_REACTIVE_ENABLE
 
-// Enable just the Afterburn, Not Pink, and Phosphor palettes.
-// #define PALETTEFX_AFTERBURN_ENABLE
+// Enable just the Afterburn palettes.
+#define PALETTEFX_AFTERBURN_ENABLE
 // #define PALETTEFX_AMBER_ENABLE
 // #define PALETTEFX_BADWOLF_ENABLE
-#define PALETTEFX_CARNIVAL_ENABLE
+// #define PALETTEFX_CARNIVAL_ENABLE
 // #define PALETTEFX_CLASSIC_ENABLE
 // #define PALETTEFX_DRACULA_ENABLE
 // #define PALETTEFX_GROOVY_ENABLE

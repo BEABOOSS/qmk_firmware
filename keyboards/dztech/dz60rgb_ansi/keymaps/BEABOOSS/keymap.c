@@ -25,9 +25,8 @@ enum layers {
 };
 
 enum custom_keycodes {
-    ARROW = SAFE_RANGE,
-    STDCC,
-    USRNAME,
+    ARROW   = SAFE_RANGE,
+    USRNAME = SAFE_RANGE,
     SELLINE,
     SELWBAK,
     SELWFWD,
@@ -38,15 +37,8 @@ enum custom_keycodes {
     RGBDEF1,
     RGBDEF2,
     // Macros invoked through the Magic key.
-    M_DOCSTR,
     M_EQEQ,
-    M_INCLUDE,
-    M_ION,
-    M_MENT,
-    M_MKGRVS,
-    M_QUEN,
     M_THE,
-    M_TMENT,
     M_NBSP,
     M_NOOP,
 };
@@ -73,7 +65,8 @@ enum custom_keycodes {
 #define HRM_SLS RGUI_T(KC_SLSH)
 
 #define EXT_EQ LT(EXT, KC_Q)
-#define NAV_SLS LT(NAV, KC_SLSH)
+#define EXT_COL LT(EXT, KC_SCLN)
+#define NAV_SLS LSFT_T(KC_SLSH)
 #define NAV_BEQL LT(BASE, KC_EQL)
 
 // clang-format off
@@ -91,28 +84,28 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] =
     [BASE] = LAYOUT_60_ansi(  // Base layer
         KC_ESC , SELLINE, C(KC_V), C(KC_A), C(KC_C), MS_BTN1, KC_HOME, KC_LEFT, KC_RGHT, KC_END , KC_TAB , KC_MPLY, _______, _______,
         KC_TAB , EXT_EQ , KC_W   , KC_F   , KC_P   , KC_G   , KC_J   , KC_L   , KC_U   , KC_Y   , KC_QUOT, _______, _______, _______,
-        MAGIC  , HRM_A  , HRM_SR , HRM_S  , HRM_NT , KC_D   , KC_H   , HRM_NN , HRM_E  , HRM_SI , HRM_O  , KC_BSPC, MAGIC  ,
-        _______, HRM_X  , KC_C   , KC_V   , HRM_B  , KC_Z   , KC_K   , HRM_M  , KC_COMM, HRM_WDOT, HRM_SLS, KC_ENT ,
+        MAGIC  , HRM_A  , HRM_SR , HRM_S  , HRM_NT , KC_D   , KC_H   , HRM_NN , HRM_E  , HRM_SI , HRM_O  , KC_BSPC, KC_UNDS,
+        EXT_COL, HRM_X  , KC_C   , KC_V   , HRM_B  , KC_Z   , KC_K   , HRM_M  , KC_COMM, HRM_WDOT, HRM_SLS, KC_ENT ,
         _______, _______, _______,                         KC_SPC,                                _______, _______, _______, _______
     ),
 
     [SYM] = LAYOUT_60_ansi( // Symbols red
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-        _______, KC_GRV , KC_LT  , KC_GT  , KC_MINS, KC_PIPE, KC_CIRC, KC_LCBR, KC_RCBR, KC_DLR , _______, _______, _______, _______,
+        _______, KC_GRV , KC_LT  , KC_GT  , KC_MINS, KC_PIPE, KC_CIRC, KC_LCBR, KC_RCBR, KC_DLR , _______, _______, _______, USRNAME,
         _______, KC_EXLM, KC_ASTR, NAV_SLS, NAV_BEQL, KC_AMPR, KC_HASH, KC_LPRN, KC_RPRN, KC_SCLN, KC_DQUO, _______, _______,
         _______, KC_TILD, KC_PLUS, KC_LBRC, KC_RBRC, KC_PERC, KC_AT  , KC_COLN, KC_COMM, KC_DOT , KC_QUOT, _______,
-        _______, _______, USRNAME,                         KC_SPC,                                KC_UNDS, _______, _______, _______
+        _______, _______, _______,                         KC_SPC,                                _______, _______, _______, _______
     ),
 
     [NAV] = LAYOUT_60_ansi(  // Navigation blue
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-        _______, KC_WREF, C(KC_PGUP), C(KC_PGDN), _______, _______, KC_PGUP, KC_HOME, KC_UP  , KC_END  , _______, _______, _______, _______,
+        _______, KC_WREF, C(KC_PGUP), C(KC_PGDN), _______, _______, KC_PGUP, KC_HOME, KC_UP  , KC_END , _______, _______, _______, _______,
         _______, KC_LALT, KC_LCTL, KC_LSFT, SELLINE, MS_BTN1, KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT, KC_DEL , _______, _______,
         _______, KC_LGUI, KC_PGUP, KC_PGDN, _______, _______, C(KC_Z), SELWBAK, SELWFWD, KC_APP , XXXXXXX, _______,
         _______, _______, _______,                         KC_SPC,                                QK_LLCK, _______, _______, _______
     ),
 
-    [NUM] = LAYOUT_60_ansi(  // Number YELLOW
+    [NUM] = LAYOUT_60_ansi(  // Number PURPLE
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
         _______, KC_SLSH, KC_9   , KC_8   , KC_7   , KC_ASTR, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, _______, _______,
         _______, KC_MINS, KC_3   , KC_2   , KC_1   , KC_PLUS, KC_0   , XXXXXXX, KC_E   , KC_RCTL, KC_LALT, _______, _______,
@@ -131,7 +124,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] =
     [FUN] = LAYOUT_60_ansi(  // Funky fun layer white
         _______, _______, _______, _______, _______, _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, QK_BOOT, _______, _______,
         XXXXXXX, KC_F18 , KC_F9  , KC_F8  , KC_F7  , XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, _______,
-        XXXXXXX, KC_F10 , KC_F14  , KC_F19  , KC_F20  , XXXXXXX, XXXXXXX, XXXXXXX, KC_RSFT, KC_RCTL, KC_LALT, XXXXXXX, _______,
+        XXXXXXX, KC_F10 , KC_F14 , KC_F19 , KC_F20 , XXXXXXX, XXXXXXX, XXXXXXX, KC_RSFT, KC_RCTL, KC_LALT, XXXXXXX, _______,
         XXXXXXX, KC_F11 , KC_F6  , KC_F5  , KC_F4  , XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_RGUI, QK_RBT ,
         _______, _______, DB_TOGG,                         KC_SPC,                                QK_LLCK, _______, _______, _______
     ),
@@ -209,10 +202,6 @@ bool caps_word_press_user(uint16_t keycode) {
         case KC_UNDS:
         case KC_COLN:
         case M_THE:
-        case M_ION:
-        case M_MENT:
-        case M_QUEN:
-        case M_TMENT:
             return true;
 
         default:
@@ -227,35 +216,13 @@ bool caps_word_press_user(uint16_t keycode) {
 // types "ao". Most of this is coded in my `get_alt_repeat_key_keycode_user()`
 // definition below.
 //
-// SFB removal and common n-grams:
-//
-//     A * -> AO     L * -> LK      S * -> SK
-//     C * -> CY     M * -> MENT    T * -> TMENT
-//     D * -> DY     O * -> OA      U * -> UE
-//     E * -> EU     P * -> PY      Y * -> YP
-//     G * -> GY     Q * -> QUEN    spc * -> THE
-//     I * -> ION    R * -> RL
 //
 // When the magic key types a letter, following it with the repeat key produces
 // "n". This is useful to type certain patterns without SFBs.
 //
-//     A * @ -> AON             (like "kaon")
-//     D * @ -> DYN             (like "dynamic")
-//     E * @ -> EUN             (like "reunite")
-//     O * @ -> OAN             (like "loan")
-//
 // Other patterns:
 //
 //     spc * @ -> THEN
-//     I * @ -> IONS            (like "nations")
-//     M * @ -> MENTS           (like "moments")
-//     Q * @ -> QUENC           (like "frequency")
-//     T * @ -> TMENTS          (like "adjustments")
-//     = *   -> ===             (JS code)
-//     ! *   -> !==             (JS code)
-//     " *   -> """<cursor>"""  (Python code)
-//     ` *   -> ```<cursor>```  (Markdown code)
-//     # *   -> #include        (C code)
 //     & *   -> &nbsp;          (HTML code)
 //     . *   -> ../             (shell)
 //     . * @ -> ../../
@@ -289,47 +256,8 @@ uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
                 // Fall through intended.
             case KC_N:
                 return KC_N;
-            // Fix SFBs and awkward strokes.
-            case HRM_E:
-                return KC_U; // E -> U
-            case KC_U:
-                return KC_E; // U -> E
-            case HRM_SI:
-                if ((mods & MOD_MASK_SHIFT) == 0) {
-                    return M_ION; // I -> ON
-                } else {
-                    return KC_QUOT; // Shift I -> '
-                }
-            case HRM_M:
-                return M_MENT; // M -> ENT
-            case EXT_EQ:
-                return M_QUEN; // Q -> UEN
-            case HRM_NT:
-                return M_TMENT; // T -> TMENT
+                // intended
 
-            case KC_P:
-                return KC_D; // P -> D
-            case HRM_B:
-                return KC_D; // B -> D
-            case KC_G:
-                return KC_D; // G -> D
-            case KC_D:
-                return KC_P; // D -> P
-
-            case KC_F:
-                return KC_C; // F -> C
-            case HRM_A:
-                return KC_C; // A -> C
-
-            case HRM_S:
-                return KC_F; // S -> F
-            // case HRM_WDOT:
-            //     // if ((mods & MOD_MASK_SHIFT) == 0) {
-            //     //     return M_UPDIR; // . -> ./
-            //     // }
-            //     return M_NOOP;
-            case KC_HASH:
-                return M_INCLUDE; // # -> include
             case KC_AMPR:
                 return M_NBSP; // & -> nbsp;
             case KC_EQL:
@@ -338,19 +266,6 @@ uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
                 return KC_SCLN; // ] -> ;
             case KC_AT:
                 return USRNAME; // @ -> <username>
-
-            // case KC_COMM:
-            //     if ((mods & MOD_MASK_SHIFT) != 0) {
-            //         return KC_EQL; // ! -> =
-            //     }
-            //     return M_NOOP;
-            case HRM_O:
-                if ((mods & MOD_MASK_SHIFT) != 0) {
-                    return M_DOCSTR; // " -> ""<cursor>"""
-                }
-                return M_NOOP;
-            case KC_GRV: // ` -> ``<cursor>``` (for Markdown code)
-                return M_MKGRVS;
         }
     }
     return KC_TRNS;
@@ -419,7 +334,7 @@ static void lighting_preset(uint8_t effect, uint8_t palette) {
 
 static void lighting_init(void) {
     lighting.val_start = 0;
-    lighting_preset(RGB_MATRIX_CUSTOM_PALETTEFX_RIPPLE, PALETTEFX_CARNIVAL);
+    lighting_preset(RGB_MATRIX_CUSTOM_PALETTEFX_FLOW, PALETTEFX_AFTERBURN);
     lighting_set_val(RGB_MATRIX_MAXIMUM_BRIGHTNESS);
 }
 
@@ -480,6 +395,9 @@ void set_layer_color(uint8_t led_min, uint8_t led_max, uint8_t layer, uint8_t re
             if (index >= led_min && index < led_max && index != NO_LED && keymap_key_to_keycode(layer, (keypos_t){col, row}) > KC_TRNS) {
                 rgb_matrix_set_color(index, red, green, blue);
             }
+            if (keymap_key_to_keycode(layer, (keypos_t){col, row}) <= KC_TRNS) {
+                rgb_matrix_set_color(index, RGB_OFF);
+            }
         }
     }
 }
@@ -496,7 +414,7 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
             set_layer_color(led_min, led_max, layer, RGB_BLUE);
             break;
         case NUM:
-            set_layer_color(led_min, led_max, layer, RGB_YELLOW);
+            set_layer_color(led_min, led_max, layer, RGB_PURPLE);
             break;
         case WIN:
             set_layer_color(led_min, led_max, layer, RGB_GREEN);
@@ -521,8 +439,6 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 #include "features/keycode_string.h"
 
 KEYCODE_STRING_NAMES_USER(
-  KEYCODE_STRING_NAME(ARROW),
-  KEYCODE_STRING_NAME(STDCC),
   KEYCODE_STRING_NAME(USRNAME),
   KEYCODE_STRING_NAME(SELLINE),
   KEYCODE_STRING_NAME(SELWBAK),
@@ -578,6 +494,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
 
     dlog_record(keycode, record);
 
+    //
     static bool left_home_ring_held  = false;
     static bool left_home_index_held = false;
     if (record->event.key.row == LEFT_HOME_ROW) {
@@ -589,10 +506,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
                 left_home_index_held = record->event.pressed;
                 break;
         }
-        // dprintf("%s", "left home row is being pressed");
 
         // NAV stays on while layer locked or while either ring or index is held.
-        //
         if (!(is_layer_locked(NAV) || left_home_ring_held || left_home_index_held)) {
             layer_off(NAV);
         }
@@ -619,20 +534,60 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
         send_keyboard_report();
     }
 
-    // If alt repeating key A, E, I, O, U, Y with no mods other than Shift, set
-    // the last key to KC_N. Above, alternate repeat of KC_N is defined to be
-    // again KC_N. This way, either tapping alt repeat and then repeat (or
-    // equivalently double tapping alt repeat) is useful to type certain patterns
-    // without SFBs:
-    //
-    //   D <altrep> <rep> -> DYN (as in "dynamic")
-    //   O <altrep> <rep> -> OAN (as in "loan")
-    if (get_repeat_key_count() < 0 && (all_mods & ~MOD_MASK_SHIFT) == 0 && (keycode == KC_A || keycode == KC_E || keycode == KC_I || keycode == KC_O || keycode == KC_U || keycode == KC_Y)) {
-        set_last_keycode(KC_N);
-        set_last_mods(0);
-    }
-
     switch (keycode) {
+            // Behavior:
+        //  * Unmodified:       _ (KC_UNDS)
+        //  * With Shift:       - (KC_MINS)
+        //  * With Alt:         Unicode en dash
+        //  * With Shift + Alt: Unicode em dash
+        case KC_UNDS: {
+            static uint16_t registered_keycode = KC_NO;
+
+            if (record->event.pressed) {
+                // if (alt) {
+                //    send_unicode_string(shift_mods ? "\xe2\x80\x94" : "\xe2\x80\x93");
+                // } else {
+                process_caps_word(keycode, record);
+                const bool shifted = (mods | get_weak_mods()) & MOD_MASK_SHIFT;
+                clear_weak_mods();
+                clear_mods();
+
+                if (registered_keycode) { // Invoked through Repeat key.
+                    unregister_code16(registered_keycode);
+                } else {
+                    registered_keycode = shifted ? KC_MINS : KC_UNDS;
+                }
+
+                register_code16(registered_keycode);
+                set_mods(mods);
+                //}
+            } else if (registered_keycode) {
+                unregister_code16(registered_keycode);
+                registered_keycode = KC_NO;
+            }
+        }
+            return false;
+
+        // Hold behavior: switches to EXT layer.
+        // Tap behavior:
+        //  * Unmodified:       :
+        //  * With Shift:       ;
+        case EXT_COL:
+            if (record->tap.count) {
+                if (record->event.pressed) {
+                    if (shift_mods) {
+                        del_weak_mods(MOD_MASK_SHIFT);
+                        unregister_mods(MOD_MASK_SHIFT);
+                        tap_code_delay(KC_SCLN, TAP_CODE_DELAY);
+                        set_mods(mods);
+                    } else {
+                        tap_code16_delay(KC_COLN, TAP_CODE_DELAY);
+                    }
+                }
+                return false;
+            }
+            return true;
+
         case SELWBAK: // Backward word selection.
             if (record->event.pressed) {
                 select_word_register('B');
@@ -656,6 +611,28 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
                 select_word_unregister();
             }
             break;
+
+        case NAV_SLS:
+            if (!record->tap.count) {
+                if (!record->event.pressed) {
+                    unregister_mods(MOD_BIT_LSHIFT);
+                } else if (left_home_ring_held) {
+                    register_mods(MOD_BIT_LCTRL | MOD_BIT_LSHIFT);
+                    layer_on(NAV);
+                }
+                return false;
+            }
+            return true; // Default handling taps /.
+
+        case NAV_BEQL:
+            if (!record->tap.count) {
+                if (left_home_ring_held && record->event.pressed) {
+                    register_mods(MOD_BIT_LCTRL);
+                    layer_on(NAV);
+                }
+                return false;
+            }
+            return true;
 
         case HRM_SR:
             if (!record->tap.count) {
@@ -695,32 +672,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
             case M_THE:
                 MAGIC_STRING(/* */ "the", KC_N);
                 break;
-            case M_ION:
-                MAGIC_STRING(/*i*/ "on", KC_S);
-                break;
-            case M_MENT:
-                MAGIC_STRING(/*m*/ "ent", KC_S);
-                break;
-            case M_QUEN:
-                MAGIC_STRING(/*q*/ "uen", KC_C);
-                break;
-            case M_TMENT:
-                MAGIC_STRING(/*t*/ "ment", KC_S);
-                break;
-            case M_INCLUDE:
-                SEND_STRING_DELAY(/*#*/ "include ", TAP_CODE_DELAY);
-                break;
             case M_EQEQ:
                 SEND_STRING_DELAY(/*=*/"==", TAP_CODE_DELAY);
                 break;
             case M_NBSP:
                 SEND_STRING_DELAY(/*&*/ "nbsp;", TAP_CODE_DELAY);
-                break;
-            case M_DOCSTR:
-                SEND_STRING_DELAY(/*"*/ "\"\"\"\"\"" SS_TAP(X_LEFT) SS_TAP(X_LEFT) SS_TAP(X_LEFT), TAP_CODE_DELAY);
-                break;
-            case M_MKGRVS:
-                SEND_STRING_DELAY(/*`*/ "``\n\n```" SS_TAP(X_UP), TAP_CODE_DELAY);
                 break;
         }
     }
