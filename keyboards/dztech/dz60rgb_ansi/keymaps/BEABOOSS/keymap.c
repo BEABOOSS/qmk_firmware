@@ -1,11 +1,5 @@
 #include QMK_KEYBOARD_H
 
-#ifdef KEYCODE_STRING_ENABLE
-#    include "features/keycode_string.h"
-#endif // KEYCODE_STRING_ENABLE
-#ifdef ORBITAL_MOUSE_ENABLE
-#    include "features/orbital_mouse.h"
-#endif // ORBITAL_MOUSE_ENABLE
 #ifdef RGB_MATRIX_CUSTOM_USER
 #    include "features/palettefx.h"
 #endif // RGB_MATRIX_CUSTOM_USER
@@ -25,7 +19,6 @@ enum layers {
 };
 
 enum custom_keycodes {
-    ARROW   = SAFE_RANGE,
     USRNAME = SAFE_RANGE,
     SELLINE,
     SELWBAK,
@@ -108,7 +101,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] =
     [NUM] = LAYOUT_60_ansi(  // Number PURPLE
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
         _______, KC_SLSH, KC_9   , KC_8   , KC_7   , KC_ASTR, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, _______, _______,
-        _______, KC_MINS, KC_3   , KC_2   , KC_1   , KC_PLUS, KC_0   , XXXXXXX, KC_E   , KC_RCTL, KC_LALT, _______, _______,
+        KC_MINS, KC_0   , KC_3   , KC_2   , KC_1   , KC_PLUS, XXXXXXX, XXXXXXX, KC_E   , KC_RCTL, KC_LALT, _______, _______,
         _______, KC_X   , KC_6   , KC_5   , KC_4   , KC_PERC, XXXXXXX, XXXXXXX, KC_COMM, KC_DOT , KC_LGUI, _______,
         _______, _______, _______,                         KC_SPC,                                QK_LLCK, _______, _______, _______
     ),
@@ -123,8 +116,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] =
 
     [FUN] = LAYOUT_60_ansi(  // Funky fun layer white
         _______, _______, _______, _______, _______, _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, QK_BOOT, _______, DF(GAME),
-        XXXXXXX, KC_F18 , KC_F9  , KC_F8  , KC_F7  , XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, _______,
-        XXXXXXX, KC_F10 , KC_F14 , KC_F19 , KC_F20 , XXXXXXX, XXXXXXX, XXXXXXX, KC_RSFT, KC_RCTL, KC_LALT, XXXXXXX, _______,
+        XXXXXXX, KC_F18 , KC_F9  , KC_F17  , KC_F7  , XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, _______,
+        XXXXXXX, KC_F16 , KC_F15 , KC_F19 , KC_F20 , XXXXXXX, XXXXXXX, XXXXXXX, KC_RSFT, KC_RCTL, KC_LALT, XXXXXXX, _______,
         XXXXXXX, KC_F11 , KC_F6  , KC_F5  , KC_F4  , XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_RGUI, QK_RBT ,
         _______, _______, DB_TOGG,                         KC_SPC,                                QK_LLCK, _______, _______, _______
     ),
@@ -157,16 +150,10 @@ uint8_t myrand(void) {
 // Combos (https://docs.qmk.fm/features/combo)
 ///////////////////////////////////////////////////////////////////////////////
 const uint16_t caps_combo[] PROGMEM = {KC_C, KC_COMM, COMBO_END};
-// const uint16_t c_v_combo[] PROGMEM = {KC_C, KC_V, COMBO_END};
-// const uint16_t h_comm_combo[] PROGMEM = {HRM_H, KC_COMM, COMBO_END};
-// const uint16_t comm_dot_combo[] PROGMEM = {KC_COMM, HRM_DOT, COMBO_END};
-const uint16_t h_n_combo[] PROGMEM = {KC_H, HRM_NN, COMBO_END};
+const uint16_t h_n_combo[] PROGMEM  = {KC_H, HRM_NN, COMBO_END};
 // clang-format off
 combo_t key_combos[] = {
     COMBO(caps_combo, CW_TOGG),          // J and , => activate Caps Word.
-    // COMBO(c_v_combo, KC_BSLS),           // c and v => backslash
-    // COMBO(h_comm_combo, KC_QUOT),        // H and , => '
-    // COMBO(comm_dot_combo, KC_SCLN),      // , and . => ;
     COMBO(h_n_combo, OSL(FUN)),          // H and N => FUN layer
 };
 // clang-format on
@@ -178,7 +165,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t* record) {
     switch (keycode) {
         case HRM_S:
         case HRM_E:
-            return TAPPING_TERM - 45;
+            return TAPPING_TERM - 35;
         default:
             return TAPPING_TERM;
     }
@@ -473,19 +460,16 @@ static void dlog_record(uint16_t keycode, keyrecord_t* record) {
 
 // clang-format on
 
-bool process_record_user(uint16_t keycode, keyrecord_t* record) {
+void keyboard_post_init_user(void) {
 #if RGB_MATRIX_CUSTOM_USER
     lighting_init();
 #endif // RGB_MATRIX_CUSTOM_USER
+}
 
+bool process_record_user(uint16_t keycode, keyrecord_t* record) {
 #ifdef RGB_MATRIX_CUSTOM_USER
     lighting_activity_trigger();
 #endif // RGB_MATRIX_CUSTOM_USER
-#ifdef ORBITAL_MOUSE_ENABLE
-    if (!process_orbital_mouse(keycode, record)) {
-        return false;
-    }
-#endif // ORBITAL_MOUSE_ENABLE
 #ifdef SELECT_WORD_ENABLE
     if (!process_select_word(keycode, record)) {
         return false;
@@ -494,7 +478,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
 
     dlog_record(keycode, record);
 
-    //
+    // track whether the left home ring and index keys are held, ignoring layer.
     static bool left_home_ring_held  = false;
     static bool left_home_index_held = false;
     if (record->event.key.row == LEFT_HOME_ROW) {
@@ -523,8 +507,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
     }
 
     // gets the current state of a modifier
-    const uint8_t mods       = get_mods();
-    const uint8_t all_mods   = (mods | get_weak_mods());
+    const uint8_t mods     = get_mods();
+    const uint8_t all_mods = (mods | get_weak_mods()
+#ifndef NO_ACTION_ONESHOT
+                              | get_oneshot_mods()
+#endif // NO_ACTION_ONESHOT
+    );
     const uint8_t shift_mods = all_mods & MOD_MASK_SHIFT;
     // const bool    alt        = all_mods & MOD_BIT(KC_LALT);
     const uint8_t layer = read_source_layers_cache(record->event.key);
@@ -535,18 +523,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
     }
 
     switch (keycode) {
-            // Behavior:
+        // Behavior:
         //  * Unmodified:       _ (KC_UNDS)
         //  * With Shift:       - (KC_MINS)
-        //  * With Alt:         Unicode en dash
-        //  * With Shift + Alt: Unicode em dash
         case KC_UNDS: {
             static uint16_t registered_keycode = KC_NO;
 
             if (record->event.pressed) {
-                // if (alt) {
-                //    send_unicode_string(shift_mods ? "\xe2\x80\x94" : "\xe2\x80\x93");
-                // } else {
                 process_caps_word(keycode, record);
                 const bool shifted = (mods | get_weak_mods()) & MOD_MASK_SHIFT;
                 clear_weak_mods();
@@ -560,7 +543,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
 
                 register_code16(registered_keycode);
                 set_mods(mods);
-                //}
             } else if (registered_keycode) {
                 unregister_code16(registered_keycode);
                 registered_keycode = KC_NO;
@@ -688,9 +670,6 @@ void housekeeping_task_user(void) {
 #ifdef RGB_MATRIX_CUSTOM_USER
     lighting_task();
 #endif // RGB_MATRIX_CUSTOM_USER
-#ifdef ORBITAL_MOUSE_ENABLE
-    orbital_mouse_task();
-#endif // ORBITAL_MOUSE_ENABLE
 #ifdef SELECT_WORD_ENABLE
     select_word_task();
 #endif // SELECT_WORD_ENABLE

@@ -39,10 +39,8 @@
 #define SELECT_WORD_TIMEOUT 2000 // When idle, clear state after 2 seconds.
 #define LAYER_LOCK_IDLE_TIMEOUT 6000
 
-// Define speed curve for Orbital Mouse.
-#define ORBITAL_MOUSE_SPEED_CURVE {24, 24, 24, 32, 62, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72}
-//     |               |               |               |           |
-// t = 0.000           1.024           2.048           3.072       3.840 s
+//#define ONESHOT_TAP_TOGGLE 5000 // time in ms
+
 
 // Matrix positions of the left home row keys.
 #define LEFT_HOME_ROW 2
