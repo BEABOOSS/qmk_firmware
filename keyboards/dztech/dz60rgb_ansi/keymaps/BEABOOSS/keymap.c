@@ -75,7 +75,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] =
     // ),
 
     [BASE] = LAYOUT_60_ansi(  // Base layer
-        KC_ESC , SELLINE, C(KC_V), C(KC_A), C(KC_C), MS_BTN1, KC_HOME, KC_LEFT, KC_RGHT, KC_END , KC_TAB , KC_MPLY, _______, _______,
+        KC_ESC , SELLINE, C(KC_V), C(KC_A), C(KC_C), MS_BTN1, KC_HOME, KC_LEFT, KC_RGHT, KC_END , KC_TAB , KC_MPLY, _______, KC_DEL ,
         KC_TAB , EXT_EQ , KC_W   , KC_F   , KC_P   , KC_G   , KC_J   , KC_L   , KC_U   , KC_Y   , KC_QUOT, _______, _______, _______,
         MAGIC  , HRM_A  , HRM_SR , HRM_S  , HRM_NT , KC_D   , KC_H   , HRM_NN , HRM_E  , HRM_SI , HRM_O  , KC_BSPC, KC_UNDS,
         EXT_COL, HRM_X  , KC_C   , KC_V   , HRM_B  , KC_Z   , KC_K   , HRM_M  , KC_COMM, HRM_WDOT, HRM_SLS, KC_ENT ,
