@@ -153,7 +153,7 @@ const uint16_t caps_combo[] PROGMEM = {KC_C, KC_COMM, COMBO_END};
 const uint16_t h_n_combo[] PROGMEM  = {KC_H, HRM_NN, COMBO_END};
 // clang-format off
 combo_t key_combos[] = {
-    COMBO(caps_combo, CW_TOGG),          // J and , => activate Caps Word.
+    COMBO(caps_combo, CW_TOGG),          // c and , => activate Caps Word.
     COMBO(h_n_combo, OSL(FUN)),          // H and N => FUN layer
 };
 // clang-format on
