@@ -1,17 +1,35 @@
 BOOTLOADER_SIZE = 6144
 
-# Build Options
-#   change yes to no to disable
-#
-BOOTMAGIC_ENABLE = yes      # Enable Bootmagic Lite
-MOUSEKEY_ENABLE = yes          # Mouse keys
-EXTRAKEY_ENABLE = yes          # Audio control and System control
-CONSOLE_ENABLE = no            # Console for debug
-COMMAND_ENABLE = no            # Commands for debug and configuration
-NKRO_ENABLE = yes           # Enable N-Key Rollover
-BACKLIGHT_ENABLE = no          # Enable keyboard backlight functionality
-RGBLIGHT_ENABLE = no           # Enable keyboard RGB underglow
-AUDIO_ENABLE = no              # Audio output
-RGB_MATRIX_ENABLE = yes        # Use RGB matrix
-RGB_MATRIX_DRIVER = IS31FL3733
+BOOTMAGIC_ENABLE = yes
+COMBO_ENABLE = yes
+EXTRAKEY_ENABLE = yes
 LTO_ENABLE = yes
+REPEAT_KEY_ENABLE = yes
+UNICODE_ENABLE = no
+UNICODEMAP_ENABLE = no
+UCIS_ENABLE = no
+UNICODE_COMMON = no
+
+AUTOCORRECT_ENABLE ?= no
+CAPS_WORD_ENABLE ?= yes
+CONSOLE_ENABLE ?= no
+GRAVE_ESC_ENABLE ?= no
+LAYER_LOCK_ENABLE = yes
+NKRO_ENABLE ?= yes
+RGB_MATRIX_ENABLE=yes
+RGB_MATRIX_CUSTOM_USER ?= yes
+SPACE_CADET_ENABLE ?= no
+TAP_DANCE_ENABLE ?= no
+
+
+SELECT_WORD_ENABLE ?= yes
+ifeq ($(strip $(SELECT_WORD_ENABLE)), yes)
+	OPT_DEFS += -DSELECT_WORD_ENABLE
+	SRC += features/select_word.c
+endif
+
+KEYCODE_STRING_ENABLE ?= no
+ifeq ($(strip $(KEYCODE_STRING_ENABLE)), yes)
+	OPT_DEFS += -DKEYCODE_STRING_ENABLE
+	SRC += features/keycode_string.c
+endif
