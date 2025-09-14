@@ -9,13 +9,13 @@
 
 enum layers {
     BASE, // breath
-    SYM,  // Symbols, color 1
-    NAV,  // Navigation, color 2
-    NUM,  // Numpad, color 3
-    WIN,  // Window management, color 4
-    FUN,  // Funky, color 5
-    EXT,  // Extras, color 6
-    GAME, // GAMING, color 7
+    NAV,  // color 2
+    MOUSE,  // color 1
+    MEDIA,  // color 3
+    NUM,  // color 4
+    SYM,  // color 5
+    FUN,  // color 6
+    GAME, // color 7
 };
 
 enum custom_keycodes {
@@ -41,26 +41,35 @@ enum custom_keycodes {
 // F20 mutes the mic on my system.
 #define MUTEMIC KC_F21
 
+#define U_NP KC_NO // key is not present
+#define U_NA KC_NO // key is not assigned
+#define U_NU KC_NO // key is not used
+
+#define U_RDO C(S(KC_Z))
+#define U_PST C(KC_V)
+#define U_CPY C(KC_C)
+#define U_CUT C(KC_X)
+#define U_UND C(KC_Z)
+
 // Define the mod-tap keys for the home row
 #define HRM_A LALT_T(KC_A)
-#define HRM_SR LT(SYM, KC_R)
+#define HRM_R LGUI_T(KC_R)
 #define HRM_S LSFT_T(KC_S)
-#define HRM_NT LT(NAV, KC_T)
-#define HRM_B LCTL_T(KC_B)
-#define HRM_X LGUI_T(KC_X)
+#define HRM_T LCTL_T(KC_T)
 
-#define HRM_NN LT(NUM, KC_N)
+#define HRM_N LCTL_T(KC_N)
 #define HRM_E RSFT_T(KC_E)
-#define HRM_SI LT(SYM, KC_I)
+#define HRM_I LGUI_T(KC_I)
 #define HRM_O LALT_T(KC_O)
-#define HRM_M RCTL_T(KC_M)
 #define HRM_WDOT LT(WIN, KC_DOT)
-#define HRM_SLS RGUI_T(KC_SLSH)
 
-#define EXT_EQ LT(EXT, KC_Q)
-#define EXT_COL LT(EXT, KC_SCLN)
-#define NAV_SLS LSFT_T(KC_SLSH)
-#define NAV_BEQL LT(BASE, KC_EQL)
+#define TME_ESC LT(MEDIA, KC_ESC)
+#define TN_SPC LT(NAV, KC_SPC)
+#define TMO_TAB LT(MOUSE, KC_TAB)
+
+#define TS_ENT LT(SYM,KC_ENT)
+#define TN_BSP LT(NUM,KC_BSPC)
+#define TF_DEL LT(FUN,KC_DEL)
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] =
@@ -75,62 +84,62 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] =
     // ),
 
     [BASE] = LAYOUT_60_ansi(  // Base layer
-        KC_ESC , SELLINE, C(KC_V), C(KC_A), C(KC_C), MS_BTN1, KC_HOME, KC_LEFT, KC_RGHT, KC_END , KC_TAB , KC_MPLY, _______, KC_DEL ,
-        KC_TAB , EXT_EQ , KC_W   , KC_F   , KC_P   , KC_G   , KC_J   , KC_L   , KC_U   , KC_Y   , KC_QUOT, _______, _______, _______,
-        MAGIC  , HRM_A  , HRM_SR , HRM_S  , HRM_NT , KC_D   , KC_H   , HRM_NN , HRM_E  , HRM_SI , HRM_O  , KC_BSPC, KC_UNDS,
-        EXT_COL, HRM_X  , KC_C   , KC_V   , HRM_B  , KC_Z   , KC_K   , HRM_M  , KC_COMM, HRM_WDOT, HRM_SLS, KC_ENT ,
-        _______, _______, _______,                         KC_SPC,                                _______, _______, _______, _______
+        KC_Q,    KC_W,    KC_F,    KC_P,    KC_G, U_NP, U_NP, U_NP, KC_J,    KC_L,    KC_U,    KC_Y, KC_B,      U_NP,
+        HRM_A,   HRM_R,   HRM_S,   HRM_T,   KC_D, U_NP, U_NP, U_NP, KC_H,    HRM_N,   HRM_E,   HRM_I, HRM_O,    U_NP,
+        KC_X,    KC_C,    KC_V,    KC_B,    KC_Z, U_NP, U_NP, U_NP, KC_K,    KC_M,    KC_COMM, HRM_WDOT,        KC_SLSH,
+        U_NP,    TME_ESC, TN_SPC,  TMO_TAB, U_NP, U_NP, U_NP, U_NP, TS_ENT,  TN_BSP,  TF_DEL,                   U_NP,
+        U_NP, U_NP,       U_NP,                         U_NP,                         U_NP,    U_NP,      U_NP, U_NP
     ),
 
-    [SYM] = LAYOUT_60_ansi( // Symbols red
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-        _______, KC_GRV , KC_LT  , KC_GT  , KC_MINS, KC_PIPE, KC_CIRC, KC_LCBR, KC_RCBR, KC_DLR , _______, _______, _______, USRNAME,
-        _______, KC_EXLM, KC_ASTR, NAV_SLS, NAV_BEQL, KC_AMPR, KC_HASH, KC_LPRN, KC_RPRN, KC_SCLN, KC_DQUO, _______, _______,
-        _______, KC_TILD, KC_PLUS, KC_LBRC, KC_RBRC, KC_PERC, KC_AT  , KC_COLN, KC_COMM, KC_DOT , XXXXXXX, _______,
-        _______, _______, _______,                         KC_SPC,                                _______, _______, _______, _______
+    [NAV] = LAYOUT_60_ansi(  // Nav blue
+        TD(U_TD_BOOT), TD(U_TD_U_TAP), TD(U_TD_U_EXTRA), TD(U_TD_U_BASE), U_NA, U_NP, U_NP, U_NP, U_RDO,   U_PST,   U_CPY,   U_CUT,  U_UND,    U_NP,
+        KC_LALT,       KC_LGUI,        KC_LSFT,          KC_LCTL,         U_NA, U_NP, U_NP, U_NP, CW_TOGG, KC_LEFT, KC_DOWN, KC_UP,  KC_RGHT,  U_NP,
+        U_NA,          KC_ALGR,        TD(U_TD_U_NUM),   TD(U_TD_U_NAV),  U_NA, U_NP, U_NP, U_NP, KC_INS,  KC_HOME, KC_PGDN, KC_PGUP,          KC_END,
+        U_NP,          U_NA,           U_NA,             U_NA,            U_NP, U_NP, U_NP, U_NP, KC_ENT,  KC_BSPC, KC_DEL,                    U_NP,
+        U_NP, U_NP,    U_NP,                                                    U_NP,                      U_NP,    U_NP,                U_NP, U_NP
     ),
 
-    [NAV] = LAYOUT_60_ansi(  // Navigation blue
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-        _______, KC_WREF, C(KC_PGUP), C(KC_PGDN), _______, _______, KC_PGUP, KC_HOME, KC_UP  , KC_END , _______, _______, _______, _______,
-        _______, KC_LALT, KC_LCTL, KC_LSFT, SELLINE, MS_BTN1, KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT, KC_DEL , _______, _______,
-        _______, KC_LGUI, KC_PGUP, KC_PGDN, _______, _______, C(KC_Z), SELWBAK, SELWFWD, KC_APP , XXXXXXX, _______,
-        _______, _______, _______,                         KC_SPC,                                QK_LLCK, _______, _______, _______
+    [MOUSE] = LAYOUT_60_ansi( // Mouse red
+        TD(U_TD_BOOT), TD(U_TD_U_TAP), TD(U_TD_U_EXTRA), TD(U_TD_U_BASE), U_NA,    U_NP, U_NP, U_NP, U_RDO,   U_PST,   U_CPY,   U_CUT,   U_UND,   U_NP,
+        KC_LALT,       KC_LGUI,        KC_LSFT,          KC_LCTL,         U_NA,    U_NP, U_NP, U_NP, U_NU,    KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, U_NP,
+        U_NA,          KC_ALGR,        TD(U_TD_U_SYM),   TD(U_TD_U_MOUSE),U_NA,    U_NP, U_NP, U_NP, U_NU,    KC_WH_L, KC_WH_D, KC_WH_U,          KC_WH_R,
+        U_NP,          U_NA,           U_NA,             U_NA,            U_NP,    U_NP, U_NP, U_NP, KC_BTN2, KC_BTN1, TF_DEL ,                   U_NP,
+        U_NP, U_NP,    U_NP,                                                       U_NP,                               U_NP,    U_NP,       U_NP, U_NP
     ),
 
-    [NUM] = LAYOUT_60_ansi(  // Number PURPLE
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-        _______, KC_SLSH, KC_9   , KC_8   , KC_7   , KC_ASTR, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, _______, _______,
-        KC_MINS, KC_0   , KC_3   , KC_2   , KC_1   , KC_PLUS, XXXXXXX, XXXXXXX, KC_E   , KC_RCTL, KC_LALT, _______, _______,
-        _______, KC_X   , KC_6   , KC_5   , KC_4   , KC_PERC, XXXXXXX, XXXXXXX, KC_COMM, KC_DOT , KC_LGUI, _______,
-        _______, _______, _______,                         KC_SPC,                                QK_LLCK, _______, _______, _______
+    [MEDIA] = LAYOUT_60_ansi(  // Media PURPLE
+        TD(U_TD_BOOT), TD(U_TD_U_TAP), TD(U_TD_U_EXTRA), TD(U_TD_U_BASE), U_NA,    U_NP, U_NP, U_NP, RGB_TOG, RGB_MOD, RGB_HUI, RGB_SAI, RGB_VAI, U_NP,
+        KC_LALT,       KC_LGUI,        KC_LSFT,          KC_LCTL,         U_NA,    U_NP, U_NP, U_NP, U_NU,    KC_MPRV, KC_VOLD, KC_VOLU, KC_MNXT, U_NP,
+        U_NA,          KC_ALGR,        TD(U_TD_U_FUN),   TD(U_TD_U_MEDIA),U_NA,    U_NP, U_NP, U_NP, OU_AUTO, U_NU,    U_NU,    U_NU,             U_NU,
+        U_NP,          U_NA,           U_NA,             U_NA,            U_NP,    U_NP, U_NP, U_NP, KC_MSTP, KC_MPLY, KC_MUTE,                   U_NP,
+        U_NP, U_NP,    U_NP,                                                       U_NP,                               U_NP,    U_NP,       U_NP, U_NP
     ),
 
-    [WIN] = LAYOUT_60_ansi(  // Window management layer GREEN
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-        _______, _______, KC_MUTE, KC_VOLD, KC_VOLU, MUTEMIC, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, _______,
-        _______, _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_RSFT, XXXXXXX, KC_LALT, XXXXXXX, _______,
-        _______, _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, S(A(KC_TAB)), A(KC_TAB), XXXXXXX, XXXXXXX, G(KC_ENT),
-        _______, _______, _______,                         KC_SPC,                                QK_LLCK, _______, _______, _______
+    [NUM] = LAYOUT_60_ansi(  // NUM GREEN
+        KC_LBRC,      KC_7,            KC_8,             KC_9,            KC_RBRC, U_NP, U_NP, U_NP, U_NA, TD(U_TD_U_BASE), TD(U_TD_U_EXTRA), TD(U_TD_U_TAP), TD(U_TD_BOOT), U_NP,
+        KC_SCLN,      KC_4,            KC_5,             KC_6,            KC_EQL,  U_NP, U_NP, U_NP, U_NA, KC_LCTL,         KC_LSFT,          KC_LGUI,        KC_LALT,       U_NP,
+        KC_GRV,       KC_1,            KC_2,             KC_3,            KC_BSLS, U_NP, U_NP, U_NP, U_NA, TD(U_TD_U_NUM),  TD(U_TD_U_NAV),   KC_ALGR,                       U_NA,
+        U_NP,         KC_DOT,          KC_0,             KC_MINS,         U_NP,    U_NP, U_NP, U_NP, U_NA, U_NA,            U_NA,                                            U_NP,
+        U_NP, U_NP,   U_NP,                                                        U_NP,                                    U_NP,             U_NP,              U_NP,       U_NP
     ),
 
-    [FUN] = LAYOUT_60_ansi(  // Funky fun layer white
-        _______, _______, _______, _______, _______, _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, QK_BOOT, _______, DF(GAME),
-        XXXXXXX, KC_F18 , KC_F9  , KC_F17  , KC_F7  , XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, _______,
-        XXXXXXX, KC_F16 , KC_F15 , KC_F19 , KC_F20 , XXXXXXX, XXXXXXX, XXXXXXX, KC_RSFT, KC_RCTL, KC_LALT, XXXXXXX, _______,
-        XXXXXXX, KC_F11 , KC_F6  , KC_F5  , KC_F4  , XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_RGUI, QK_RBT ,
-        _______, _______, DB_TOGG,                         KC_SPC,                                QK_LLCK, _______, _______, _______
+    [SYM] = LAYOUT_60_ansi(  // SYM white
+        KC_LCBR,      KC_AMPR,        KC_ASTR,           KC_LPRN,         KC_RCBR, U_NP, U_NP, U_NP, U_NA, TD(U_TD_U_BASE), TD(U_TD_U_EXTRA), TD(U_TD_U_TAP), TD(U_TD_BOOT), U_NP,
+        KC_COLN,      KC_DLR,         KC_PERC,           KC_CIRC,         KC_PLUS, U_NP, U_NP, U_NP, U_NA, KC_LCTL,         KC_LSFT,          KC_LGUI,        KC_LALT,       U_NP,
+        KC_TILD,      KC_EXLM,        KC_AT,             KC_HASH,         KC_PIPE, U_NP, U_NP, U_NP, U_NA, TD(U_TD_U_NUM),  TD(U_TD_U_NAV),   KC_ALGR,                       U_NA,
+        U_NP,         KC_LPRN,        KC_RPRN,           KC_UNDS,         U_NP,    U_NP, U_NP, U_NP, U_NA, U_NA,            U_NA,                                            U_NP,
+        U_NP, U_NP,   U_NP,                                                        U_NP,                                    U_NP,             U_NP,                    U_NP, U_NP
     ),
 
-    [EXT] = LAYOUT_60_ansi(  // Mouse and extra white
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-        _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, _______, _______, _______, _______, _______, _______, _______,
-        _______, KC_LALT, KC_LCTL, KC_LSFT, SELLINE, XXXXXXX, _______, _______, _______, _______, _______, _______, _______,
-        _______, KC_LGUI, C(KC_V), C(KC_A), C(KC_C), C(KC_X), XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
-        _______, _______, _______,                         KC_SPC,                                QK_LLCK, _______, _______, _______
+    [FUN] = LAYOUT_60_ansi(  // FUN and extra white
+        KC_F12,       KC_F7,          KC_F8,             KC_F9,           KC_PSCR, U_NP, U_NP, U_NP, U_NA, TD(U_TD_U_BASE), TD(U_TD_U_EXTRA), TD(U_TD_U_TAP), TD(U_TD_BOOT), U_NP,
+        KC_F11,       KC_F4,          KC_F5,             KC_F6,           KC_SCRL, U_NP, U_NP, U_NP, U_NA, KC_LCTL,         KC_LSFT,          KC_LGUI,        KC_LALT,       U_NP,
+        KC_F10,       KC_F1,          KC_F2,             KC_F3,           KC_PAUS, U_NP, U_NP, U_NP, U_NA, TD(U_TD_U_FUN),  TD(U_TD_U_MEDIA), KC_ALGR,                       U_NA,
+        U_NP,         KC_APP,         KC_SPC,            KC_TAB,          U_NP,    U_NP, U_NP, U_NP, U_NA, U_NA,            U_NA,                                            U_NP,
+        U_NP, U_NP,   U_NP,                                                        U_NP,                                    U_NP,             U_NP,                    U_NP, U_NP
     ),
 
-    [GAME] = LAYOUT_60_ansi(  // Gaming Layer
+    [GAME] = LAYOUT_60_ansi(  // Gaming Layer will prob change this later
         KC_ESC , KC_1   , KC_2   , KC_3   , KC_4   , KC_5   , KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , KC_MINS, KC_EQL , KC_BSPC,
         KC_TAB , KC_Q   , KC_W   , KC_F   , KC_P   , KC_G   , KC_J   , KC_L   , KC_U   , KC_Y   , KC_QUOT, KC_LBRC, KC_RBRC, KC_BSLS,
         KC_LSFT, KC_A   , KC_R   , KC_S   , KC_T   , KC_D   , KC_H   , KC_N   , KC_E   , KC_I   , KC_O   , KC_BSPC, KC_RSFT,
