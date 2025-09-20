@@ -53,13 +53,6 @@ void u_td_fn_U_BASE(tap_dance_state_t *state, void *user_data) {
     }
 }
 
-// to be fixed
-// void u_td_fn_U_TAP(tap_dance_state_t *state, void *user_data) {
-//     if(state->count == 2) {
-//         default_layer_set((layer_state_t)1 << GAME);
-//     }
-// }
-
 void u_td_fn_U_NAV(tap_dance_state_t *state, void *user_data) {
     if(state->count == 2) {
         default_layer_set((layer_state_t)1 << NAV);
@@ -301,6 +294,10 @@ uint8_t myrand(void) {
 // };
 // // clang-format on
 
+enum combo_events {
+    CB_TNBSP_TFDEL_BASE,
+};
+
 const uint16_t PROGMEM thumbcombos_base_right[] = {LT(SYM, KC_ENT), LT(NUM, KC_BSPC), COMBO_END};
 const uint16_t PROGMEM thumbcombos_base_left[] = {LT(NAV, KC_SPC), LT(MOUSE, KC_TAB), COMBO_END};
 const uint16_t PROGMEM thumbcombos_base_G_r[] = {TN_BSP, TF_DEL, COMBO_END};
@@ -311,9 +308,10 @@ const uint16_t PROGMEM thumbcombos_num[] = {KC_0, KC_MINS, COMBO_END};
 const uint16_t PROGMEM thumbcombos_sym[] = {KC_RPRN, KC_UNDS, COMBO_END};
 const uint16_t PROGMEM thumbcombos_fun[] = {KC_SPC, KC_TAB, COMBO_END};
 combo_t key_combos[] = {
+    [CB_TNBSP_TFDEL_BASE] = COMBO_ACTION(thumbcombos_base_G_r),
     COMBO(thumbcombos_base_right, LT(FUN, KC_DEL)),
     COMBO(thumbcombos_base_left, LT(MEDIA, KC_ESC)),
-    COMBO(thumbcombos_base_G_r, LT(NUM, KC_BSPC)),
+    // COMBO(thumbcombos_base_G_r, TD(U_TD_U_BASE)),
     COMBO(thumbcombos_nav, KC_DEL),
     COMBO(thumbcombos_mouse, MS_BTN3),
     COMBO(thumbcombos_media, KC_MUTE),
@@ -321,6 +319,17 @@ combo_t key_combos[] = {
     COMBO(thumbcombos_sym, KC_LPRN),
     COMBO(thumbcombos_fun, KC_APP)
 };
+
+void process_combo_event(uint8_t combo_index, bool pressed) {
+    switch (combo_index) {
+        case CB_TNBSP_TFDEL_BASE:
+            if (pressed) {
+                // When the combo is pressed, switch to the GAME layer.
+                default_layer_set((layer_state_t)1 << BASE);
+            }
+            break;
+    }
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Tap-hold configuration (https://docs.qmk.fm/tap_hold)
