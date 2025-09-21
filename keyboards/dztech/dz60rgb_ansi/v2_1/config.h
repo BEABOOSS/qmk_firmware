@@ -18,9 +18,9 @@
 
 #define LAYER_STATE_8BIT
 
-#define NO_MUSIC_MODE
-
-// #define NO_DEBUG
+#ifndef NO_DEBUG
+#  define NO_DEBUG
+#endif
 
 // Unfortunately, some applications drop or misorder fast key events. This is a
 // partial fix to slow down the rate at which macros are sent.

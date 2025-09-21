@@ -1,22 +1,15 @@
 #include QMK_KEYBOARD_H
 
-#ifdef RGB_MATRIX_CUSTOM_USER
-#    include "features/palettefx.h"
-#endif // RGB_MATRIX_CUSTOM_USER
+
 #ifdef SELECT_WORD_ENABLE
 #    include "features/select_word.h"
 #endif // SELECT_WORD_ENABLE
-#include "print.h"
-
-#ifndef MAGIC_ENABLE
-uint8_t mod_config(uint8_t mod) {
-    return mod;
-}
-#endif
+#ifndef NO_DEBUG
+    #include "print.h"
+#endif // NO_DEBUG
 
 enum layers {
     BASE,
-    // TAP,
     NAV,
     MOUSE,
     MEDIA,
@@ -24,10 +17,10 @@ enum layers {
     SYM,
     FUN,
     GAME,
+    LAYER_COUNT
 };
 enum {
     U_TD_BOOT,
-    // U_TD_U_TAP,
     U_TD_U_BASE,
     U_TD_U_NUM,
     U_TD_U_NAV,
@@ -38,72 +31,39 @@ enum {
     U_TD_U_GAME,
 };
 
+// Helper to compute the current effective layer.
+static inline uint8_t effective_layer_state(layer_state_t st) {
+    return get_highest_layer(st | default_layer_state);
+}
+static inline uint8_t effective_layer_now(void) {
+    return effective_layer_state(layer_state);
+}
 
-// static td_state_t td_state;
+// Replace the per-layer tap-dance functions with a single macro.
+#define TD_SET_DEF_FN(fname, target_layer) \
+    void fname(tap_dance_state_t* state, void* user_data) { \
+        if (state->count == 2) { \
+            default_layer_set(1UL << (target_layer)); \
+        } \
+    }
 
 void u_td_fn_boot(tap_dance_state_t *state, void *user_data) {
-    if(state->count == 2) {
-        reset_keyboard();
-    }
+    if (state->count == 2) { reset_keyboard(); }
 }
 
-void u_td_fn_U_BASE(tap_dance_state_t *state, void *user_data) {
-    if(state->count == 2) {
-        default_layer_set((layer_state_t)1 << BASE);
-    }
-}
-
-void u_td_fn_U_NAV(tap_dance_state_t *state, void *user_data) {
-    if(state->count == 2) {
-        default_layer_set((layer_state_t)1 << NAV);
-    }
-}
-
-void u_td_fn_U_MOUSE(tap_dance_state_t *state, void *user_data) {
-    if(state->count == 2) {
-        default_layer_set((layer_state_t)1 << MOUSE);
-    }
-}
-
-void u_td_fn_U_MEDIA(tap_dance_state_t *state, void *user_data) {
-    if(state->count == 2) {
-        default_layer_set((layer_state_t)1 << MEDIA);
-    }
-}
-
-void u_td_fn_U_NUM(tap_dance_state_t *state, void *user_data) {
-    if(state->count == 2) {
-        default_layer_set((layer_state_t)1 << NUM);
-    }
-}
-
-void u_td_fn_U_SYM(tap_dance_state_t *state, void *user_data) {
-    if(state->count == 2) {
-        default_layer_set((layer_state_t)1 << SYM);
-    }
-}
-
-void u_td_fn_U_FUN(tap_dance_state_t *state, void *user_data) {
-    if(state->count == 2) {
-        default_layer_set((layer_state_t)1 << FUN);
-    }
-}
-
-void u_td_fn_U_GAME(tap_dance_state_t *state, void *user_data) {
-    if(state->count == 2) {
-        default_layer_set((layer_state_t)1 << GAME);
-    }
-}
+// Generate all layer-switch TD handlers.
+TD_SET_DEF_FN(u_td_fn_U_BASE,  BASE)
+TD_SET_DEF_FN(u_td_fn_U_NAV,   NAV)
+TD_SET_DEF_FN(u_td_fn_U_MOUSE, MOUSE)
+TD_SET_DEF_FN(u_td_fn_U_MEDIA, MEDIA)
+TD_SET_DEF_FN(u_td_fn_U_NUM,   NUM)
+TD_SET_DEF_FN(u_td_fn_U_SYM,   SYM)
+TD_SET_DEF_FN(u_td_fn_U_FUN,   FUN)
+TD_SET_DEF_FN(u_td_fn_U_GAME,  GAME)
 
 
 enum custom_keycodes {
-    ALT_MOD,
-    RGBBRI,
-    RGBNEXT,
-    RGBHUP,
-    RGBHRND,
-    RGBDEF1,
-    RGBDEF2,
+    ALT_MOD = SAFE_RANGE,
     // Macros invoked through the Magic key.
 #ifdef SELECT_WORD_ENABLE
     SELLINE,
@@ -144,30 +104,15 @@ bool alt_mod_active = false;
 #define TN_BSP LT(NUM,KC_BSPC)
 #define TF_DEL LT(FUN,KC_DEL)
 
+
+#ifdef KEYCODE_STRING_ENABLE
 KEYCODE_STRING_NAMES_USER(
     KEYCODE_STRING_NAME(ALT_MOD),
-    // KEYCODE_STRING_NAME(RGBBRI),
-    // KEYCODE_STRING_NAME(RGBNEXT),
-    // KEYCODE_STRING_NAME(RGBHUP),
-    // KEYCODE_STRING_NAME(RGBHRND),
-    // KEYCODE_STRING_NAME(RGBDEF1),
-    // KEYCODE_STRING_NAME(RGBDEF2),
-    // KEYCODE_STRING_NAME(M_NOOP),
 #ifdef SELECT_WORD_ENABLE
     KEYCODE_STRING_NAME(SELLINE),
     KEYCODE_STRING_NAME(SELWBAK),
     KEYCODE_STRING_NAME(SELWFWD),
 #endif // SELECT_WORD_ENABLE
-    // KEYCODE_STRING_NAME(U_TD_BOOT),
-    // KEYCODE_STRING_NAME(U_TD_U_TAP),
-    // KEYCODE_STRING_NAME(U_TD_U_BASE),
-    // KEYCODE_STRING_NAME(U_TD_U_NUM),
-    // KEYCODE_STRING_NAME(U_TD_U_NAV),
-    // KEYCODE_STRING_NAME(U_TD_U_MOUSE),
-    // KEYCODE_STRING_NAME(U_TD_U_MEDIA),
-    // KEYCODE_STRING_NAME(U_TD_U_SYM),
-    // KEYCODE_STRING_NAME(U_TD_U_FUN),
-    // KEYCODE_STRING_NAME(U_TD_U_GAME),
     KEYCODE_STRING_NAME(HRM_A),
     KEYCODE_STRING_NAME(HRM_R),
     KEYCODE_STRING_NAME(HRM_S),
@@ -183,11 +128,13 @@ KEYCODE_STRING_NAMES_USER(
     KEYCODE_STRING_NAME(TN_BSP),
     KEYCODE_STRING_NAME(TF_DEL)
 );
+#endif // KEYCODE_STRING_ENABLE
 
-static const char* const LAYER_NAMES[] = {
+#ifndef NO_DEBUG
+static const char* const LAYER_NAMES[LAYER_COUNT] = {
     "BASE","NAV","MOUSE","MEDIA","NUM","SYM","FUN","GAME"
 };
-
+#endif // NO_DEBUG
 
 
 //
@@ -276,11 +223,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] =
 
 // clang-format on
 // A cheap pseudorandom generator.
-uint8_t myrand(void) {
-    static uint16_t state = 1;
-    state                 = UINT16_C(36563) * (state + timer_read());
-    return state >> 8;
-}
+// uint8_t myrand(void) {
+//     static uint16_t state = 1;
+//     state                 = UINT16_C(36563) * (state + timer_read());
+//     return state >> 8;
+// }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Combos (https://docs.qmk.fm/features/combo)
@@ -311,7 +258,6 @@ combo_t key_combos[] = {
     [CB_TNBSP_TFDEL_BASE] = COMBO_ACTION(thumbcombos_base_G_r),
     COMBO(thumbcombos_base_right, LT(FUN, KC_DEL)),
     COMBO(thumbcombos_base_left, LT(MEDIA, KC_ESC)),
-    // COMBO(thumbcombos_base_G_r, TD(U_TD_U_BASE)),
     COMBO(thumbcombos_nav, KC_DEL),
     COMBO(thumbcombos_mouse, MS_BTN3),
     COMBO(thumbcombos_media, KC_MUTE),
@@ -320,11 +266,11 @@ combo_t key_combos[] = {
     COMBO(thumbcombos_fun, KC_APP)
 };
 
-void process_combo_event(uint8_t combo_index, bool pressed) {
+void process_combo_event(uint16_t combo_index, bool pressed) {
     switch (combo_index) {
         case CB_TNBSP_TFDEL_BASE:
             if (pressed) {
-                // When the combo is pressed, switch to the GAME layer.
+                // Switch to the BASE layer
                 default_layer_set((layer_state_t)1 << BASE);
             }
             break;
@@ -342,7 +288,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t* record) {
         default:
             return TAPPING_TERM;
     }
-};
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Caps word (https://docs.qmk.fm/features/caps_word)
@@ -373,217 +319,62 @@ bool caps_word_press_user(uint16_t keycode) {
 ///////////////////////////////////////////////////////////////////////////////
 // RGB Matrix Lighting (https://docs.qmk.fm/features/rgb_matrix)
 ///////////////////////////////////////////////////////////////////////////////
-#if RGB_MATRIX_CUSTOM_USER
-// The following logic controls the RGB Matrix light level with a convenient
-// 3-state setting---off, dim, or full---and turns off automatically and with
-// smooth transitions when the keyboard is idle.
-
-#    include <lib/lib8tion/lib8tion.h>
-
-static struct {
-    uint32_t timer;
-    uint8_t  event_count;
-    uint8_t  val;
-    uint8_t  val_start;
-    uint8_t  val_end;
-} lighting = {0};
-
-static void lighting_set_val(uint8_t val) {
-    lighting.val     = val;
-    lighting.val_end = val;
-    if (lighting.val_start != lighting.val_end) {
-        lighting.timer = timer_read32();
-    }
-}
-
-/** Cycles between off, 40% brightness, and max brightness. */
-static void lighting_cycle_3_state(void) {
-    if (lighting.val == 0) {
-        lighting_set_val((RGB_MATRIX_MAXIMUM_BRIGHTNESS * 2 + 2) / 5);
-    } else if (lighting.val < RGB_MATRIX_MAXIMUM_BRIGHTNESS) {
-        lighting_set_val(RGB_MATRIX_MAXIMUM_BRIGHTNESS);
-    } else {
-        lighting_set_val(0);
-    }
-}
-
-static void lighting_set_palette(uint8_t palette) {
-    if (lighting.val == 0) {
-        lighting_cycle_3_state();
-    }
-    rgb_matrix_enable_noeeprom();
-    rgb_matrix_sethsv_noeeprom(RGB_MATRIX_HUE_STEP * palette, 255, rgb_matrix_get_val());
-}
-
-static void lighting_preset(uint8_t effect, uint8_t palette) {
-    lighting_set_palette(palette);
-    rgb_matrix_mode_noeeprom(effect);
-    rgb_matrix_set_speed_noeeprom(100);
-}
-
-static void lighting_init(void) {
-    lighting.val_start = 0;
-    lighting_preset(RGB_MATRIX_CUSTOM_PALETTEFX_FLOW, PALETTEFX_AFTERBURN);
-    lighting_set_val(RGB_MATRIX_MAXIMUM_BRIGHTNESS);
-}
-
-static void lighting_set_sleep_timer(void) {
-    if (lighting.val_start == lighting.val_end) {
-        const uint32_t duration = (lighting.event_count <= 10) ? UINT32_C(5000) : UINT32_C(30000);
-        lighting.timer          = (timer_read32() + duration) | 1;
-    }
-}
-
-/** This function should be called on every key event to keep lights awake. */
-static void lighting_activity_trigger(void) {
-    if (lighting.val > 0) {
-        lighting.event_count = qadd8(lighting.event_count, 1);
-        if (lighting.val_end == 0) {
-            lighting_set_val(lighting.val); // Wake lighting.
-        } else {
-            lighting_set_sleep_timer();
-        }
-    }
-}
-
-static void lighting_task(void) {
-    if (!lighting.timer) {
-        return;
-    } // Early return if sleeping.
-    const uint32_t diff = timer_read32() - lighting.timer;
-
-    if (lighting.val_start != lighting.val_end) {
-        const uint8_t t = (diff <= 511) ? (uint8_t)(diff / 2) : 255;
-
-        hsv_t hsv = rgb_matrix_get_hsv();
-        hsv.v     = (t == 255) ? lighting.val_end : lerp8by8(lighting.val_start, lighting.val_end, ease8InOutCubic(t));
-        rgb_matrix_sethsv_noeeprom(hsv.h, hsv.s, hsv.v);
-
-        if (t == 255) { // Transition complete.
-            lighting.val_end   = rgb_matrix_get_val();
-            lighting.val_start = lighting.val_end;
-            if (lighting.val_end == 0) { // Sleep.
-                lighting.timer       = 0;
-                lighting.event_count = 0;
-            } else {
-                lighting_set_sleep_timer();
-            }
-        }
-    } else if (diff < UINT32_MAX / 2) { // Sleep timeout expired; begin fading.
-        lighting.val_end = 0;
-    }
-}
-#endif // RGB_MATRIX_CUSTOM_USER
-
 #if RGB_MATRIX_ENABLE
-void set_layer_color(uint8_t led_min, uint8_t led_max, uint8_t layer, uint8_t red, uint8_t green, uint8_t blue) {
+static void set_layer_color(uint8_t led_min, uint8_t led_max, uint8_t layer, uint8_t red, uint8_t green, uint8_t blue) {
     for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
         for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
             uint8_t index = g_led_config.matrix_co[row][col];
-
-            if (index >= led_min && index < led_max && index != NO_LED && keymap_key_to_keycode(layer, (keypos_t){col, row}) > KC_TRNS) {
-                rgb_matrix_set_color(index, red, green, blue);
+            if (index == NO_LED || index < led_min || index >= led_max) {
+                continue;
             }
-            if (keymap_key_to_keycode(layer, (keypos_t){col, row}) <= KC_TRNS) {
+            uint16_t kc = keymap_key_to_keycode(layer, (keypos_t){col, row});
+            if (kc > KC_TRNS) {
+                rgb_matrix_set_color(index, red, green, blue);
+            } else {
                 rgb_matrix_set_color(index, RGB_OFF);
             }
         }
     }
 }
 
-bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
-    uint8_t layer = get_highest_layer(layer_state | default_layer_state);
-    switch (layer) {
-        case NAV:
-            set_layer_color(led_min, led_max, layer, RGB_BLUE);
-            break;
-        case MOUSE:
-            set_layer_color(led_min, led_max, layer, RGB_YELLOW);
-            break;
-        case MEDIA:
-            set_layer_color(led_min, led_max, layer, RGB_PURPLE);
-            break;
-        case NUM:
-            set_layer_color(led_min, led_max, layer, RGB_PINK);
-            break;
-        case SYM:
-            set_layer_color(led_min, led_max, layer, RGB_GREEN);
-            break;
-        case FUN:
-            set_layer_color(led_min, led_max, layer, RGB_RED);
-            break;
-        case GAME:
-            set_layer_color(led_min, led_max, layer, RGB_OFF);
-            break;
-        default:
-            set_layer_color(led_min, led_max, layer, RGB_WHITE);
-            break;
-    }
+static const uint8_t LAYER_RGB[LAYER_COUNT][3] = {
+    {RGB_WHITE},   // BASE
+    {RGB_BLUE},    // NAV
+    {RGB_YELLOW},  // MOUSE
+    {RGB_PURPLE},  // MEDIA
+    {RGB_PINK},    // NUM
+    {RGB_GREEN},   // SYM
+    {RGB_RED},     // FUN
+    {RGB_OFF},     // GAME
+};
+_Static_assert(LAYER_COUNT == (sizeof(LAYER_RGB) / sizeof(LAYER_RGB[0])), "Update LAYER_RGB when layers change.");
 
+bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+    uint8_t layer = effective_layer_now();
+    uint8_t idx   = (layer < LAYER_COUNT) ? layer : BASE;
+    set_layer_color(led_min, led_max, layer, LAYER_RGB[idx][0], LAYER_RGB[idx][1], LAYER_RGB[idx][2]);
     return false;
 }
 #endif // RGB_MATRIX_ENABLE
 
-// Log when the highest momentary layer changes.
+#ifndef NO_DEBUG
+// Log effective (momentary | default) layer in callbacks.
 layer_state_t layer_state_set_user(layer_state_t state) {
-    uint8_t layer = get_highest_layer(state);
-    const char* name = (layer < (sizeof(LAYER_NAMES)/sizeof(LAYER_NAMES[0]))) ? LAYER_NAMES[layer] : "?";
+    uint8_t layer = effective_layer_state(state);
+    const char* name = (layer < LAYER_COUNT) ? LAYER_NAMES[layer] : "?";
     dprintf("Layer changed: %u (%s)\n", layer, name);
     return state;
 }
 
-// Log when the default (persistent) layer changes.
 layer_state_t default_layer_state_set_user(layer_state_t state) {
-    uint8_t layer = get_highest_layer(state);
-    const char* name = (layer < (sizeof(LAYER_NAMES)/sizeof(LAYER_NAMES[0]))) ? LAYER_NAMES[layer] : "?";
+    uint8_t layer = effective_layer_state(state);
+    const char* name = (layer < LAYER_COUNT) ? LAYER_NAMES[layer] : "?";
     dprintf("Default layer changed: %u (%s)\n", layer, name);
     return state;
 }
+#endif // NO_DEBUG
 
 // clang-format off
-
-///////////////////////////////////////////////////////////////////////////////
-// Debug logging
-///////////////////////////////////////////////////////////////////////////////
-
-// #if !defined(NO_DEBUG) && defined(KEYCODE_STRING_ENABLE)
-
-// #pragma message "dlog_record: enabled"
-// #include "print.h"
-// // #include "features/keycode_string.h"
-
-// // KEYCODE_STRING_NAMES_USER(
-// //   KEYCODE_STRING_NAME(SELLINE),
-// //   KEYCODE_STRING_NAME(SELWBAK),
-// //   KEYCODE_STRING_NAME(SELWFWD),
-// //   KEYCODE_STRING_NAME(RGBBRI),
-// //   KEYCODE_STRING_NAME(RGBNEXT),
-// //   KEYCODE_STRING_NAME(RGBHUP),
-// //   KEYCODE_STRING_NAME(RGBHRND),
-// //   KEYCODE_STRING_NAME(RGBDEF1),
-// //   KEYCODE_STRING_NAME(RGBDEF2),
-// // );
-
-// static void dlog_record(uint16_t keycode, keyrecord_t* record) {
-//   if (!debug_enable) { return; }
-//   uint8_t layer = read_source_layers_cache(record->event.key);
-//   bool is_tap_hold = IS_QK_MOD_TAP(keycode) || IS_QK_LAYER_TAP(keycode);
-//   xprintf("L%-2u ", layer);  // Log the layer.
-//   if (IS_COMBOEVENT(record->event)) {  // Combos don't have a position.
-//     xprintf("combo   ");
-//   } else {  // Log the "(row,col)" position.
-//     xprintf("(%2u,%2u) ", record->event.key.row, record->event.key.col);
-//   }
-//   xprintf("%-4s %-7s %s\n",  // "(tap|hold) (press|release) <keycode>".
-//       is_tap_hold ? (record->tap.count ? "tap" : "hold") : "",
-//       record->event.pressed ? "press" : "release",
-//       get_keycode_string(keycode));
-// }
-// #else
-// #pragma message "dlog_record: disabled"
-// #define dlog_record(keycode, record)
-// #endif  // !defined(NO_DEBUG) && defined(KEYCODE_STRING_ENABLE)
-
 
 ///////////////////////////////////////////////////////////////////////////////
 // User functions
@@ -592,29 +383,26 @@ layer_state_t default_layer_state_set_user(layer_state_t state) {
 // clang-format on
 
 void keyboard_post_init_user(void) {
+#ifndef NO_DEBUG
     debug_enable = true;
     debug_keyboard = true;
-#if RGB_MATRIX_CUSTOM_USER
-    lighting_init();
-#endif // RGB_MATRIX_CUSTOM_USER
+#endif // NO_DEBUG
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t* record) {
-#ifdef RGB_MATRIX_CUSTOM_USER
-    lighting_activity_trigger();
-#endif // RGB_MATRIX_CUSTOM_USER
 #ifdef SELECT_WORD_ENABLE
     if (!process_select_word(keycode, record)) {
         return false;
     }
 #endif // SELECT_WORD_ENABLE
-    uint8_t layer = get_highest_layer(layer_state | default_layer_state);
-    const char* name = (layer < (sizeof(LAYER_NAMES)/sizeof(LAYER_NAMES[0]))) ? LAYER_NAMES[layer] : "?";
-    dprintf("Layer: %u (%s)\n", layer, name);
-    dprintf("kc: %s\n", get_keycode_string(keycode));
-    //dlog_record(keycode, record);
-    // const uint8_t layer = read_source_layers_cache(record->event.key);
-
+#ifndef NO_DEBUG
+    if (record->event.pressed) {
+        uint8_t layer = effective_layer_now();
+        const char* name = (layer < LAYER_COUNT) ? LAYER_NAMES[layer] : "?";
+        dprintf("Layer: %u (%s)\n", layer, name);
+        dprintf("kc: %s\n", get_keycode_string(keycode));
+    }
+#endif // DEBUG_ENABLE
     switch (keycode) {
         case ALT_MOD:
             if (record->event.pressed) {
@@ -671,23 +459,21 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
 }
 
 tap_dance_action_t tap_dance_actions[] = {
-    [U_TD_BOOT]      = ACTION_TAP_DANCE_FN(u_td_fn_boot), // Define this if you want a boot tap dance
-    [U_TD_U_BASE]      = ACTION_TAP_DANCE_FN(u_td_fn_U_BASE), // Define this if you want a boot tap dance
-    [U_TD_U_NUM]      = ACTION_TAP_DANCE_FN(u_td_fn_U_NUM), // Define this if you want a boot tap dance
-    [U_TD_U_MOUSE]      = ACTION_TAP_DANCE_FN(u_td_fn_U_MOUSE), // Define this if you want a boot tap dance
-    [U_TD_U_MEDIA]      = ACTION_TAP_DANCE_FN(u_td_fn_U_MEDIA), // Define this if you want a boot tap dance
-    [U_TD_U_SYM]      = ACTION_TAP_DANCE_FN(u_td_fn_U_SYM), // Define this if you want a boot tap dance
-    [U_TD_U_FUN]      = ACTION_TAP_DANCE_FN(u_td_fn_U_FUN), // Define this if you want a boot tap dance
-    [U_TD_U_GAME]      = ACTION_TAP_DANCE_FN(u_td_fn_U_GAME), // Define this if you want a boot tap dance
+    [U_TD_BOOT]      = ACTION_TAP_DANCE_FN(u_td_fn_boot),
+    [U_TD_U_BASE]    = ACTION_TAP_DANCE_FN(u_td_fn_U_BASE),
+    [U_TD_U_NUM]     = ACTION_TAP_DANCE_FN(u_td_fn_U_NUM),
+    [U_TD_U_MOUSE]   = ACTION_TAP_DANCE_FN(u_td_fn_U_MOUSE),
+    [U_TD_U_MEDIA]   = ACTION_TAP_DANCE_FN(u_td_fn_U_MEDIA),
+    [U_TD_U_SYM]     = ACTION_TAP_DANCE_FN(u_td_fn_U_SYM),
+    [U_TD_U_FUN]     = ACTION_TAP_DANCE_FN(u_td_fn_U_FUN),
+    [U_TD_U_GAME]    = ACTION_TAP_DANCE_FN(u_td_fn_U_GAME),
+    [U_TD_U_NAV]     = ACTION_TAP_DANCE_FN(u_td_fn_U_NAV),
     // Add more as needed
 };
 
 
 
 void housekeeping_task_user(void) {
-#ifdef RGB_MATRIX_CUSTOM_USER
-    lighting_task();
-#endif // RGB_MATRIX_CUSTOM_USER
 #ifdef SELECT_WORD_ENABLE
     select_word_task();
 #endif // SELECT_WORD_ENABLE
