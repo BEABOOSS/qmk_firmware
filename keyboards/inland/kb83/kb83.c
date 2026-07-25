@@ -55,7 +55,7 @@ const snled27351_led_t PROGMEM g_snled27351_leds[SNLED27351_LED_COUNT] = {
     {0, CB1_CA13,  CB2_CA13,  CB3_CA13},
     {0, CB1_CA14,  CB2_CA14,  CB3_CA14},
     {1, CB4_CA1,   CB5_CA1,   CB6_CA1},
-    
+
     {0, CB4_CA1,   CB5_CA1,   CB6_CA1},
     {0, CB4_CA2,   CB5_CA2,   CB6_CA2},
     {0, CB4_CA3,   CB5_CA3,   CB6_CA3},
@@ -86,7 +86,7 @@ const snled27351_led_t PROGMEM g_snled27351_leds[SNLED27351_LED_COUNT] = {
     {0, CB7_CA12,  CB8_CA12,  CB9_CA12},
     {0, CB7_CA13,  CB8_CA13,  CB9_CA13},
     {1, CB4_CA3,   CB5_CA3,   CB6_CA3},
- 
+
     {0, CB10_CA1,   CB11_CA1,   CB12_CA1},
     {0, CB10_CA2,   CB11_CA2,   CB12_CA2},
     {0, CB10_CA3,   CB11_CA3,   CB12_CA3},
@@ -120,7 +120,7 @@ const snled27351_led_t PROGMEM g_snled27351_leds[SNLED27351_LED_COUNT] = {
     {1, CB7_CA3,   CB8_CA3,   CB9_CA3},
     {1, CB7_CA4,   CB8_CA4,   CB9_CA4},
     {1, CB7_CA5,   CB8_CA5,   CB9_CA5},
-   
+
     {1, CB10_CA1,   CB11_CA1,   CB12_CA1},
     {1, CB10_CA2,   CB11_CA2,   CB12_CA2},
     {1, CB10_CA3,   CB11_CA3,   CB12_CA3},
@@ -163,32 +163,4 @@ bool dip_switch_update_kb(uint8_t index, bool active) {
         set_single_default_layer(active ? 2 : 0);
     }
     return true;
-}
-
-bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
-    if (!process_record_user(keycode, record)) {
-        return false;
-    }
-    switch (keycode) {
-        case QK_RGB_MATRIX_TOGGLE:
-            if (record->event.pressed) {
-                switch (rgb_matrix_get_flags()) {
-                    case LED_FLAG_ALL: {
-                        rgb_matrix_set_flags(LED_FLAG_NONE);
-                        rgb_matrix_set_color_all(0, 0, 0);
-                    } break;
-                    default: {
-                        rgb_matrix_set_flags(LED_FLAG_ALL);
-                    } break;
-                }
-            }
-            if (!rgb_matrix_is_enabled()) {
-                rgb_matrix_set_flags(LED_FLAG_ALL);
-                rgb_matrix_enable();
-            }
-            return false;
-
-        default:
-            return true;
-    }
 }
